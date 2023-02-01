@@ -1,0 +1,27 @@
+.navBar {
+	background: #2e2e2e;
+	position: sticky;
+	width: 100%;
+	top: 0;
+	z-index: 9;
+	height: 50px;
+}
+
+.logo {
+	max-width: 50px;
+	transition: all 0.2s;
+	margin-right: 20px;
+}
+.navItem a {
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 5px 20px;
+	color: white !important;
+}
+
+.navItem a.active {
+	color: #f90931 !important;
+}
+.navItem a:hover {
+	color: #ff4c60;
+}

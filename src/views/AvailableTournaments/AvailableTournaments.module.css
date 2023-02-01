@@ -1,0 +1,59 @@
+.container_game_info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.img_copertina {
+	object-fit: cover;
+	height: 40vh;
+	width: 100%;
+	background-position: 10% 10%;
+	overflow: hidden;
+}
+
+.container_info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 70%;
+	background-color: #212529;
+	position: relative;
+	top: -50px;
+	border-radius: 10px;
+	color: white;
+	max-height: 100px;
+	padding-right: 20px;
+}
+
+.img_card {
+	width: 120px;
+	height: 150px;
+	border-radius: 15px;
+	object-fit: cover;
+	position: relative;
+}
+.container_card:hover {
+	top: -10px;
+}
+.container_img_titolo {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.container_tabella {
+	width: 100%;
+	margin-top: 20px;
+	background-color: #212529;
+	border-radius: 10px;
+	padding: 20px;
+}
+.container_tabella thead tr th {
+	user-select: none;
+}
+.container_partite_disponibili {
+	width: 70vw;
+}

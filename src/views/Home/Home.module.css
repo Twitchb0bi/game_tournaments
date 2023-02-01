@@ -1,0 +1,8 @@
+.container_cards_games {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 20px;
+	gap: 20px;
+}

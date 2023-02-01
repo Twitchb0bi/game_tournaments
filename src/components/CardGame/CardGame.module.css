@@ -1,0 +1,23 @@
+.container_card {
+	cursor: pointer;
+	border: 1px solid lightgray;
+	border-radius: 15px;
+	position: relative;
+	top: 0;
+	transition: top ease 0.5s;
+}
+.img_card {
+	width: 150px;
+	height: 200px;
+	border-radius: 15px;
+	object-fit: cover;
+}
+/* .testo_card {
+	font-size: 15px;
+	font-weight: bold;
+	color: #ffffff;
+} */
+
+.container_card:hover {
+	top: -10px;
+}
