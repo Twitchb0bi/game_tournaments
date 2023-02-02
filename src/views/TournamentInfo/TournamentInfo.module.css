@@ -13,14 +13,15 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	margin-top: 20px;
 }
 
-.container_info {
+.container_tournament_header {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 70%;
+	width: 100%;
 	background-color: #212529;
 	border-radius: 10px;
 	color: white;
@@ -44,5 +45,109 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	gap: 10px;
+}
+
+.container_countdown {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	margin-top: 20px;
+	width: 100%;
+}
+
+.container_value_countdown {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #6e1010;
+	border-radius: 10px;
+	width: 300px;
+	height: 100px;
+	animation: pulsecolor 1s infinite;
+}
+
+@keyframes pulsecolor {
+	10% {
+		background: #dd0000;
+	}
+}
+
+.container_value_countdown > span,
+h4 {
+	font-size: 1.5rem;
+	color: white;
+}
+.container_info_tournament {
+	width: 100%;
+	margin-top: 50px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding-left: 20px;
+}
+.container_info {
+	width: 80%;
+}
+.container_details_tournament {
+	background-color: #212529;
+	border-radius: 10px;
+	padding-left: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	width: 100%;
+}
+.container_details_tournament p {
+	font-size: 1rem;
+	color: white;
+	margin: 5px;
+}
+
+.container_prize {
+	border-radius: 10px;
+	max-width: 400px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	padding: 20px;
+}
+.container_details_prize {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+	width: 100%;
+	flex-wrap: wrap;
+	align-items: center;
+	row-gap: 20px;
+}
+.title_tournament {
+	font-size: min(2rem, 5vw);
+	font-weight: bold;
+}
+.container_prize_item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.container_prize_item > span {
+	font-size: 1.5rem;
+	color: white;
+}
+.container_img_platform {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	gap: 10px;
 }

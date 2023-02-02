@@ -20,3 +20,6 @@ code {
 .text_white {
 	color: white;
 }
+.underline {
+	text-decoration: underline;
+}

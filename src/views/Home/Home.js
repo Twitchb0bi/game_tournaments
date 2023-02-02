@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CardGame from "../../components/CardGame/CardGame";
+import CustomTooltip from "../../components/Tooltip/CustomTooltip";
 import { getInformazioneGiocoSpecifica } from "../../utilities/utilities";
 
 import style from "./Home.module.css";
@@ -33,7 +34,7 @@ export default function Home() {
 	return (
 		<div className={style.container_cards_games}>
 			{arr.map((game) => (
-				<CardGame img={game.img} id={game.id} title={game.title} />
+				<CardGame img={game.img} id={game.id.toString()} title={game.title} />
 			))}
 		</div>
 	);
