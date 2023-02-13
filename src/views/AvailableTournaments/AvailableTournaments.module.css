@@ -18,7 +18,7 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 70%;
-	background-color: #212529;
+	background-color: #111c2c;
 	position: relative;
 	top: -50px;
 	border-radius: 10px;
@@ -47,12 +47,21 @@
 .container_tabella {
 	width: 100%;
 	margin-top: 20px;
-	background-color: #212529;
+	background-color: #111c2c;
 	border-radius: 10px;
 	padding: 20px;
 }
 .container_tabella thead tr th {
 	user-select: none;
+	color: white;
+}
+.container_tabella > tbody tr,
+th,
+td {
+	color: white;
+}
+.container_tabella td {
+	color: white !important;
 }
 .container_partite_disponibili {
 	width: 70vw;

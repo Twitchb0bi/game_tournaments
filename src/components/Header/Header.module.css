@@ -1,5 +1,5 @@
 .navBar {
-	background: #2e2e2e;
+	background: #0e1f34;
 	position: sticky;
 	width: 100%;
 	top: 0;
@@ -24,4 +24,14 @@
 }
 .navItem a:hover {
 	color: #ff4c60;
+}
+.username {
+	color: white;
+	font-weight: bold;
+	padding: 5px 20px;
+}
+.container_header_options {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }

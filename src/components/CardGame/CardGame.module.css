@@ -5,9 +5,10 @@
 	position: relative;
 	top: 0;
 	transition: top ease 0.5s;
+	height: fit-content;
 }
 .img_card {
-	width: 150px;
+	width: 250px;
 	height: 200px;
 	border-radius: 15px;
 	object-fit: cover;
@@ -20,4 +21,17 @@
 
 .container_card:hover {
 	top: -10px;
+}
+.container_card_title {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 250px;
+}
+.text_overflow {
+	width: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

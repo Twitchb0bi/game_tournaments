@@ -47,8 +47,8 @@ export default function TournamentBracket({ matches }) {
 					width={screenDimension.innerWidth}
 					height={screenDimension.innerHeight}
 					{...props}
-					background="#212529"
-					SVGBackground="#212529">
+					background="#bbd6f90d"
+					SVGBackground="#bbd6f90d">
 					{children}
 				</SVGViewer>
 			)}

@@ -3,6 +3,28 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
-	margin-top: 20px;
+	margin-top: 50px;
 	gap: 20px;
+	flex: 0.45;
+}
+.container_home {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px 10%;
+	flex: 1;
+	height: 100%;
+}
+.input_search {
+	width: max(40%, 300px) !important;
+	margin-top: 30px;
+}
+.container_header_home {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+	min-height: max(300px, 30vh);
 }

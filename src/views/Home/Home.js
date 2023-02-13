@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { Input } from "reactstrap";
 import CardGame from "../../components/CardGame/CardGame";
-import CustomTooltip from "../../components/Tooltip/CustomTooltip";
-import { getInformazioneGiocoSpecifica } from "../../utilities/utilities";
-
+import Loading from "../../components/Loading/Loading";
 import style from "./Home.module.css";
 
 let arr = [
@@ -24,18 +23,65 @@ let arr = [
 	{ id: 12, title: "Hearthstone", img: "copertinaHearthstone.jpg" },
 ];
 export default function Home() {
-	const [classiEroi, setClassiEroi] = useState([]);
-
+	const [allGames, setAllGames] = useState([]);
+	const [loading, setLoading] = useState(true);
+	//Funzione che ottiene i nomi dei gioci dal server
+	const getGames = async (text = "", page = 1) => {
+		let response = await fetch(
+			"https://api.rawg.io/api/games?key=aefc184c81b84e7b8078acaddba70abc&tags=multiplayer&page=" +
+				page +
+				"&search=" +
+				text +
+				"&search_precise=false&search_exact=false&page_size=24&exclude_additions=true&exclude_parents=true&exclude_games=true&exclude_dlc=true&exclude_expansions=true&metacritic=90,100"
+		);
+		if (response.status == 200) {
+			let data = await response.json();
+			setAllGames(data.results);
+			setLoading(false);
+		} else {
+			setLoading(false);
+		}
+	};
 	useEffect(() => {
-		//Funzione che ottiene gli eroi, se le classi non sono presenti utilizzo un array vuoto
-		setClassiEroi(getInformazioneGiocoSpecifica("classes") || []);
+		getGames();
 	}, []);
-	console.log("ciao");
+
+	let debounceTimer;
+	const debounce = useCallback(async (callback) => {
+		window.clearTimeout(debounceTimer);
+		debounceTimer = window.setTimeout(callback, 250);
+	}, []);
 	return (
-		<div className={style.container_cards_games}>
-			{arr.map((game) => (
-				<CardGame img={game.img} id={game.id.toString()} title={game.title} />
-			))}
+		<div className={style.container_home}>
+			<div className={style.container_header_home}>
+				<h1 className="text_white">Where you want to compete?</h1>
+
+				<Input
+					placeholder="Search the game"
+					bsSize={"lg"}
+					onChange={(e) => {
+						setLoading(true);
+						debounce(() => getGames(e.target.value));
+					}}
+					className={style.input_search}
+				/>
+			</div>
+			<div className="separator" />
+
+			{loading ? (
+				<Loading />
+			) : (
+				<div className={style.container_cards_games} data-aos="fade-up">
+					{allGames.map((game) => (
+						<CardGame
+							key={game.id.toString()}
+							img={game.background_image}
+							id={game.id.toString()}
+							title={game.name}
+						/>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

@@ -1,7 +1,7 @@
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, Table } from "reactstrap";
 
 import style from "./AvailableTournaments.module.css";
@@ -26,6 +26,7 @@ let arr = [
 ];
 export default function AvailableTournaments() {
 	let { id } = useParams();
+	const location = useLocation();
 	const navigate = useNavigate();
 	const [headerTabella, setHeaderTabella] = useState([
 		{ name: "Entry Fee", dir: "" },
@@ -34,6 +35,8 @@ export default function AvailableTournaments() {
 		{ name: "Starting", dir: "" },
 		{ name: "Enrolled", dir: "" },
 	]);
+	const [infoGioco, setInfoGioco] = useState(location.state);
+
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
 		// console.log(headerTabella);
@@ -53,9 +56,11 @@ export default function AvailableTournaments() {
 	const handleClickJoin = (tournamentId) => {
 		navigate(`/tournament/${tournamentId}`);
 	};
+
+	//require("../../assets/images/largeRL.jpg")
 	return (
 		<div className={style.container_game_info}>
-			<img src={require("../../assets/images/largeRL.jpg")} className={style.img_copertina} />
+			<img src={infoGioco.img} className={style.img_copertina} />
 			<div className={style.container_info}>
 				<div className={style.container_img_titolo}>
 					<div className={style.container_card}>
@@ -65,13 +70,13 @@ export default function AvailableTournaments() {
 							className={style.img_card}
 						/>
 					</div>
-					<h1>Rocket League</h1>
+					<h1>{infoGioco.title}</h1>
 				</div>
 				{/* <h2>Modalità</h2> */}
 			</div>
 			<div className={style.container_partite_disponibili}>
 				<div className={style.container_tabella}>
-					<Table responsive dark hover>
+					<Table responsive hover>
 						<thead>
 							<tr>
 								{headerTabella.map((header) => (
@@ -96,7 +101,7 @@ export default function AvailableTournaments() {
 						<tbody>
 							{arr.map((tournament) => (
 								<tr>
-									<th scope="row">{tournament.entryFee} $</th>
+									<td scope="row">{tournament.entryFee} $</td>
 									<td>{tournament.teamSize}</td>
 									<td>{tournament.competition}</td>
 									<td>{tournament.starting}</td>

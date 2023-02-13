@@ -14,6 +14,7 @@
 	align-items: center;
 	justify-content: center;
 	margin-top: 20px;
+	margin-bottom: 50px;
 }
 
 .container_tournament_header {
@@ -22,7 +23,7 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	background-color: #212529;
+	background-color: #bbd6f90d;
 	border-radius: 10px;
 	color: white;
 	max-height: 100px;
@@ -62,17 +63,10 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background-color: #6e1010;
 	border-radius: 10px;
 	width: 300px;
 	height: 100px;
-	animation: pulsecolor 1s infinite;
-}
-
-@keyframes pulsecolor {
-	10% {
-		background: #dd0000;
-	}
+	border: 1px solid lightgray;
 }
 
 .container_value_countdown > span,
@@ -88,27 +82,24 @@ h4 {
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-start;
-	padding-left: 20px;
 }
 .container_info {
-	width: 80%;
+	width: 90%;
 }
 .container_details_tournament {
-	background-color: #212529;
+	background-color: #bbd6f90d;
 	border-radius: 10px;
-	padding-left: 15px;
+	padding: 15px;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 	align-items: center;
 	gap: 10px;
 	flex-wrap: wrap;
 	width: 100%;
 }
 .container_details_tournament p {
-	font-size: 1rem;
+	font-size: 1.1rem;
 	color: white;
-	margin: 5px;
 }
 
 .container_prize {
@@ -120,6 +111,7 @@ h4 {
 	justify-content: space-between;
 	gap: 10px;
 	padding: 20px;
+	flex: 0.2;
 }
 .container_details_prize {
 	display: flex;
@@ -150,4 +142,41 @@ h4 {
 	flex-direction: row;
 	align-items: center;
 	gap: 10px;
+}
+.container_card_info {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	width: 180px;
+	height: 100px;
+	border-radius: 10px;
+	border: 1px solid lightgray;
+	padding: 20px;
+}
+.container_cards_info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+	gap: 10px;
+	flex: 0.8;
+	flex-wrap: wrap;
+}
+@media screen and (max-width: 860px) {
+	.container_cards_info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		gap: 10px;
+		flex: 1;
+		flex-wrap: wrap;
+	}
+	.container_details_tournament {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 }

@@ -3,11 +3,14 @@ import TournamentBracket from "../../components/TournamentBracket.js/TournamentB
 import Countdown from "react-countdown";
 import style from "./TournamentInfo.module.css";
 import CustomTooltip from "../../components/Tooltip/CustomTooltip";
+import Icon from "../../components/Icon/Icon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEuroSign, faUsers, faWallet } from "@fortawesome/free-solid-svg-icons";
 let arr = [
 	{
 		id: 19753,
 		nextMatchId: 8,
-		tournamentRoundText: "4",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [],
@@ -32,7 +35,7 @@ let arr = [
 	{
 		id: 19755,
 		nextMatchId: 19754,
-		tournamentRoundText: "1",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCORE_DONE",
 		participants: [
@@ -57,7 +60,7 @@ let arr = [
 	{
 		id: 19756,
 		nextMatchId: 19754,
-		tournamentRoundText: "1",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "RUNNING",
 		participants: [
@@ -82,7 +85,7 @@ let arr = [
 	{
 		id: 19758,
 		nextMatchId: 19757,
-		tournamentRoundText: "1",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [
@@ -99,7 +102,7 @@ let arr = [
 	{
 		id: 19759,
 		nextMatchId: 19757,
-		tournamentRoundText: "1",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [
@@ -125,7 +128,7 @@ let arr = [
 	{
 		id: 1,
 		nextMatchId: 8,
-		tournamentRoundText: "4",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [],
@@ -133,7 +136,7 @@ let arr = [
 	{
 		id: 2,
 		nextMatchId: 1,
-		tournamentRoundText: "4",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [],
@@ -141,7 +144,7 @@ let arr = [
 	{
 		id: 3,
 		nextMatchId: 1,
-		tournamentRoundText: "4",
+		tournamentRoundText: "2",
 		startTime: "2021-05-30",
 		state: "SCHEDULED",
 		participants: [],
@@ -212,35 +215,29 @@ export default function TournamentInfo() {
 						<div>
 							<h1 className={style.title_tournament}>2v2 EXTREME Tournament</h1>
 							<div className={style.container_img_platform}>
-								<img
+								<Icon
 									src={require("../../assets/images/monitor.png")}
 									id={"monitor"}
-									width={20}
-									alt={"PC"}
+									title={"Monitor"}
 								/>
-								<CustomTooltip title={"Monitor"} id={"monitor"} />
-								<img
+								<Icon
 									src={require("../../assets/images/xbox.png")}
-									id={"xbox"}
 									width={40}
-									alt={"Xbox"}
+									id={"xbox"}
+									title={"Xbox"}
 								/>
-								<CustomTooltip title={"Xbox"} id={"xbox"} />
-								<img
+								<Icon
 									src={require("../../assets/images/ps4.png")}
 									id={"ps4"}
 									width={40}
-									alt={"PS4"}
+									title={"PS4"}
 								/>
-								<CustomTooltip title={"PS4"} id={"ps4"} />
-
-								<img
+								<Icon
 									src={require("../../assets/images/european.png")}
 									id={"europe"}
 									width={25}
-									alt={"Europe"}
+									title={"Europe"}
 								/>
-								<CustomTooltip title={"Europe"} id={"europe"} />
 							</div>
 						</div>
 					</div>
@@ -249,19 +246,31 @@ export default function TournamentInfo() {
 				<div className={style.container_info_tournament}>
 					{/* <div className={style.container_details_prize}> */}
 					<div className={style.container_details_tournament}>
-						<div>
-							<p>
-								<strong>Mode:</strong> 2v2
-							</p>
-							<p>
-								<strong>Map:</strong> Wasteland
-							</p>
-							<p>
-								<strong>Rules:</strong> 3 minutes, 3 games, 3 points
-							</p>
-							<p>
-								<strong>Total Prize:</strong> 100€
-							</p>
+						<div className={style.container_cards_info}>
+							<div className={style.container_card_info}>
+								<FontAwesomeIcon icon={faUsers} color={"white"} size={"2x"} />
+								<p>
+									<strong>Mode:</strong> 2v2
+								</p>
+							</div>
+							<div className={style.container_card_info}>
+								<FontAwesomeIcon icon={faWallet} color={"white"} size={"2x"} />
+								<p>
+									<strong>Entry:</strong> Free
+								</p>
+							</div>
+							<div className={style.container_card_info}>
+								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"2x"} />
+								<p>
+									<strong>Total Prize:</strong> 100€
+								</p>
+							</div>
+							<div className={style.container_card_info}>
+								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"2x"} />
+								<p>
+									<strong>Total Prize:</strong> 100€
+								</p>
+							</div>
 						</div>
 						<div className={style.container_prize}>
 							<div className={style.container_prize_item}>
@@ -277,22 +286,22 @@ export default function TournamentInfo() {
 								<span>20$</span>
 							</div>
 						</div>
+						{!tournamentStarted && (
+							<div className={style.container_countdown}>
+								<div className={style.container_value_countdown}>
+									<h4>Starts In:</h4>
+									<Countdown date={Date.now() + 30000} onComplete={handleCountdownEnd} />
+								</div>
+							</div>
+						)}
 					</div>
+
 					{/* </div> */}
 				</div>
 
 				{tournamentStarted && (
 					<div className={style.container_bracket}>
 						<TournamentBracket matches={arr} />
-					</div>
-				)}
-
-				{!tournamentStarted && (
-					<div className={style.container_countdown}>
-						<div className={style.container_value_countdown}>
-							<h4>Starts In:</h4>
-							<Countdown date={Date.now() + 30000} onComplete={handleCountdownEnd} />
-						</div>
 					</div>
 				)}
 			</div>
