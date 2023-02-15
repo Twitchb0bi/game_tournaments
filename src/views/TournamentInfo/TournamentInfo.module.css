@@ -23,12 +23,10 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	background-color: #bbd6f90d;
-	border-radius: 10px;
 	color: white;
-	max-height: 110px;
+	padding: 20px 0;
 	padding-right: 20px;
-	margin: 30px 0;
+	flex-wrap: wrap;
 }
 
 .img_card {
@@ -38,15 +36,61 @@
 	object-fit: cover;
 	position: relative;
 }
-.container_card:hover {
-	top: -10px;
+.container_card {
+	width: 100%;
+	background-color: #bbd6f90d;
+	border-radius: 10px;
+	height: 120px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 30px 0;
+	gap: 10px;
+}
+
+.container_img {
+	position: relative;
+	left: 0;
+	top: 0;
 }
 .container_img_titolo {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
 	gap: 10px;
+	flex: 0.66;
+}
+
+@media screen and (max-width: 470px) {
+	.container_card {
+		width: 100%;
+		background-color: #bbd6f90d;
+		border-radius: 10px;
+		height: 180px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin: 30px 0;
+	}
+
+	.container_countdown {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		border-radius: 10px;
+		flex: 0.3;
+	}
+
+	.container_tournament_header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+		color: white;
+		padding: 20px 0;
+		padding-right: 20px;
+		flex-wrap: wrap;
+	}
 }
 
 .container_countdown {
@@ -54,6 +98,7 @@
 	align-items: center;
 	justify-content: flex-end;
 	border-radius: 10px;
+	flex: 0.3;
 }
 
 .container_value_countdown {
@@ -143,7 +188,7 @@ h4 {
 	align-items: flex-start;
 	justify-content: flex-start;
 	width: 150px;
-	height: 75px;
+	height: 82px;
 	border-radius: 10px;
 	border: 1px solid lightgray;
 	padding: 10px;

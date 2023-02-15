@@ -18,7 +18,8 @@ export default function CardUser({ avatar, position, userId, username, earnings,
 			<p className={style.username}>{username}</p>
 			<p className="text-white">€ {earnings}</p>
 			<div className={style.card_header_avatar_username_earnings_stats}>
-				<span className="green">{win + " W / "}</span>
+				<span className="green">{win + " W "}</span>
+				<span className="text-white">/ </span>
 				<span className="red">{lose + " L"}</span>
 			</div>
 		</div>

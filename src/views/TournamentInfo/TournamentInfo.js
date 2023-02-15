@@ -199,58 +199,59 @@ export default function TournamentInfo() {
 	const handleCountdownEnd = () => {
 		setTournamentStarted(true);
 	};
-	console.log(tournamentInfo);
 	return (
 		<div className={style.container_tournament_bracket}>
 			<div className={style.container_info}>
-				<div className={style.container_tournament_header}>
-					<div className={style.container_img_titolo}>
-						<div className={style.container_card}>
-							<img
-								src={tournamentInfo.img}
-								alt={tournamentInfo.title}
-								id={"img"}
-								className={style.img_card}
-							/>
-							<CustomTooltip title={tournamentInfo.title} id={"img"} />
-						</div>
-						<div>
-							<h1 className={style.title_tournament}>{tournamentInfo.tournamentTitle}</h1>
-							<div className={style.container_img_platform}>
-								<Icon
-									src={require("../../assets/images/monitor.png")}
-									id={"monitor"}
-									title={"Monitor"}
-								/>
-								<Icon
-									src={require("../../assets/images/xbox.png")}
-									width={40}
-									id={"xbox"}
-									title={"Xbox"}
-								/>
-								<Icon
-									src={require("../../assets/images/ps4.png")}
-									id={"ps4"}
-									width={40}
-									title={"PS4"}
-								/>
-								<Icon
-									src={require("../../assets/images/european.png")}
-									id={"europe"}
-									width={25}
-									title={"Europe"}
-								/>
-							</div>
-						</div>
+				<div className={style.container_card}>
+					<div className={style.container_img}>
+						<img
+							src={tournamentInfo.img}
+							alt={tournamentInfo.title}
+							id={"img"}
+							className={style.img_card}
+						/>
+						<CustomTooltip title={tournamentInfo.title} id={"img"} />
 					</div>
-					{!tournamentStarted && (
-						<div className={style.container_countdown}>
-							<div className={style.container_value_countdown}>
-								<h4>Starts In:</h4>
-								<Countdown date={tournamentInfo.starting} onComplete={handleCountdownEnd} />
+					<div className={style.container_tournament_header}>
+						<div className={style.container_img_titolo}>
+							<div>
+								<h1 className={style.title_tournament}>{tournamentInfo.tournamentTitle}</h1>
+								<div className={style.container_img_platform}>
+									<Icon
+										src={require("../../assets/images/monitor.png")}
+										id={"monitor"}
+										title={"Monitor"}
+									/>
+									<Icon
+										src={require("../../assets/images/xbox.png")}
+										width={40}
+										id={"xbox"}
+										title={"Xbox"}
+									/>
+									<Icon
+										src={require("../../assets/images/ps4.png")}
+										id={"ps4"}
+										width={40}
+										title={"PS4"}
+									/>
+									<Icon
+										src={require("../../assets/images/european.png")}
+										id={"europe"}
+										width={25}
+										title={"Europe"}
+									/>
+								</div>
 							</div>
 						</div>
-					)}
+						{!tournamentStarted && (
+							<div className={style.container_countdown}>
+								<div className={style.container_value_countdown}>
+									<h4>Starts In:</h4>
+									<Countdown date={tournamentInfo.starting} onComplete={handleCountdownEnd} />
+								</div>
+							</div>
+						)}
+					</div>
 				</div>
 
 				<div className={style.container_info_tournament}>

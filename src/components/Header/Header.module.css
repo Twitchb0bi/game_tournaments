@@ -28,6 +28,13 @@
 	color: white;
 	font-weight: bold;
 	padding: 5px 20px;
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	align-items: center;
+}
+.username p {
+	margin: 0;
 }
 .container_header_options {
 	display: flex;

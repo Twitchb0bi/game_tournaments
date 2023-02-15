@@ -172,7 +172,7 @@ export default function Ladder() {
 										</td>
 										<td>€ {user.earnings}</td>
 										<td>
-											<span className="green">{user.win + " W / "}</span>
+											<span className="green">{user.win + " W "}</span> /{" "}
 											<span className="red">{user.lose + " L"}</span>
 										</td>
 									</tr>
