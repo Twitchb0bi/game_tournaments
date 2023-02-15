@@ -17,7 +17,7 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 70%;
+	width: 90%;
 	background-color: #111c2c;
 	position: relative;
 	top: -50px;
@@ -64,5 +64,8 @@ td {
 	color: white !important;
 }
 .container_partite_disponibili {
-	width: 70vw;
+	width: 90vw;
+}
+.table {
+	min-width: 700px;
 }

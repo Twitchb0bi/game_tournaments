@@ -14,6 +14,9 @@ export default function UsernameCreation() {
 		localStorage.setItem("username", username);
 		navigate("/");
 	};
+	useEffect(() => {
+		localStorage.getItem("username") && navigate("/");
+	}, []);
 	return (
 		<div className={style.container_username_creation}>
 			<h1 className="text-white big-title">Welcome!</h1>

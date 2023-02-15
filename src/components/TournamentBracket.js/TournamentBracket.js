@@ -13,8 +13,8 @@ export default function TournamentBracket({ matches }) {
 	});
 	//Funzione che ottiene le dimensioni dello schermo
 	function getWindowDimensions() {
-		const finalWidth = Math.max(window.innerWidth - 50, 500);
-		const finalHeight = Math.min(window.innerHeight - 100, 700);
+		const finalWidth = Math.max(window.innerWidth - 50, 0);
+		const finalHeight = Math.min(window.innerHeight - 100, 3000);
 
 		return {
 			innerWidth: finalWidth,

@@ -21,7 +21,7 @@ const Header = ({ navItems }) => {
 	return (
 		<div className={style.navBar}>
 			<Navbar expand="md" dark>
-				<div className="container">
+				<div className="container container_nav">
 					<NavbarToggler onClick={toggle} />
 
 					<Collapse isOpen={isOpen} navbar>

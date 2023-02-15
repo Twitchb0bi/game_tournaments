@@ -5,7 +5,8 @@ import style from "./TournamentInfo.module.css";
 import CustomTooltip from "../../components/Tooltip/CustomTooltip";
 import Icon from "../../components/Icon/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEuroSign, faUsers, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faEuroSign, faGamepad, faUsers, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from "react-router-dom";
 let arr = [
 	{
 		id: 19753,
@@ -194,10 +195,11 @@ let arr = [
 
 export default function TournamentInfo() {
 	const [tournamentStarted, setTournamentStarted] = useState(false);
-
+	const [tournamentInfo, setTournamentInfo] = useState(useLocation().state);
 	const handleCountdownEnd = () => {
 		setTournamentStarted(true);
 	};
+	console.log(tournamentInfo);
 	return (
 		<div className={style.container_tournament_bracket}>
 			<div className={style.container_info}>
@@ -205,15 +207,15 @@ export default function TournamentInfo() {
 					<div className={style.container_img_titolo}>
 						<div className={style.container_card}>
 							<img
-								src={require("../../assets/images/copertinaRocketLeague.jpg")}
-								alt={"Rocket League"}
-								id={"RL"}
+								src={tournamentInfo.img}
+								alt={tournamentInfo.title}
+								id={"img"}
 								className={style.img_card}
 							/>
-							<CustomTooltip title={"Rocket League"} id={"RL"} />
+							<CustomTooltip title={tournamentInfo.title} id={"img"} />
 						</div>
 						<div>
-							<h1 className={style.title_tournament}>2v2 EXTREME Tournament</h1>
+							<h1 className={style.title_tournament}>{tournamentInfo.tournamentTitle}</h1>
 							<div className={style.container_img_platform}>
 								<Icon
 									src={require("../../assets/images/monitor.png")}
@@ -241,6 +243,14 @@ export default function TournamentInfo() {
 							</div>
 						</div>
 					</div>
+					{!tournamentStarted && (
+						<div className={style.container_countdown}>
+							<div className={style.container_value_countdown}>
+								<h4>Starts In:</h4>
+								<Countdown date={tournamentInfo.starting} onComplete={handleCountdownEnd} />
+							</div>
+						</div>
+					)}
 				</div>
 
 				<div className={style.container_info_tournament}>
@@ -248,52 +258,45 @@ export default function TournamentInfo() {
 					<div className={style.container_details_tournament}>
 						<div className={style.container_cards_info}>
 							<div className={style.container_card_info}>
-								<FontAwesomeIcon icon={faUsers} color={"white"} size={"2x"} />
+								<FontAwesomeIcon icon={faGamepad} color={"white"} size={"lg"} />
 								<p>
-									<strong>Mode:</strong> 2v2
+									<strong>Mode:</strong> {tournamentInfo.teamSize + "V" + tournamentInfo.teamSize}
 								</p>
 							</div>
 							<div className={style.container_card_info}>
-								<FontAwesomeIcon icon={faWallet} color={"white"} size={"2x"} />
+								<FontAwesomeIcon icon={faWallet} color={"white"} size={"lg"} />
 								<p>
-									<strong>Entry:</strong> Free
+									<strong>Entry fee:</strong> €{tournamentInfo.entryFee}
 								</p>
 							</div>
 							<div className={style.container_card_info}>
-								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"2x"} />
+								<FontAwesomeIcon icon={faUsers} color={"white"} size={"lg"} />
 								<p>
-									<strong>Total Prize:</strong> 100€
+									<strong>Enrolled:</strong>{" "}
+									{tournamentInfo.enrolled + "/" + tournamentInfo.maxTeams}
 								</p>
 							</div>
 							<div className={style.container_card_info}>
-								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"2x"} />
+								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"lg"} />
 								<p>
-									<strong>Total Prize:</strong> 100€
+									<strong>Prize:</strong> € {tournamentInfo.totalEarnings}
 								</p>
 							</div>
 						</div>
 						<div className={style.container_prize}>
 							<div className={style.container_prize_item}>
 								<img src={require("../../assets/images/second.png")} width={80} />
-								<span>30$</span>
+								<span>€ {tournamentInfo.secondEarnings}</span>
 							</div>
 							<div className={style.container_prize_item}>
 								<img src={require("../../assets/images/first.png")} width={100} />
-								<span>50$</span>
+								<span>€ {tournamentInfo.firstEarnings}</span>
 							</div>
 							<div className={style.container_prize_item}>
 								<img src={require("../../assets/images/third.png")} width={75} />
-								<span>20$</span>
+								<span>€{tournamentInfo.thirdEarnings}</span>
 							</div>
 						</div>
-						{!tournamentStarted && (
-							<div className={style.container_countdown}>
-								<div className={style.container_value_countdown}>
-									<h4>Starts In:</h4>
-									<Countdown date={Date.now() + 30000} onComplete={handleCountdownEnd} />
-								</div>
-							</div>
-						)}
 					</div>
 
 					{/* </div> */}

@@ -16,10 +16,32 @@
 	user-select: none;
 }
 .container_utenti {
-	width: max(60vw, 300px);
-	overflow-x: auto;
+	width: max(80vw, 300px);
 }
 .container_tabella td {
 	color: white !important;
 	font-size: 1.2rem;
+}
+.container_view_option {
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+	width: 100%;
+	flex-direction: row;
+	gap: 10px;
+}
+.selected {
+	background-color: #bbd6f90d;
+	border-radius: 5px;
+	padding: 2px 10px;
+}
+.container_card {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

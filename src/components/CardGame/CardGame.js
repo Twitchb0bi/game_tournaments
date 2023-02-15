@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import CustomTooltip from "../Tooltip/CustomTooltip";
 
 import style from "./CardGame.module.css";
-export default function CardGame({ img, title, id }) {
+export default function CardGame({ img, title, id, background }) {
 	const navigate = useNavigate();
 
 	//Funzione che gestisce il click sulla card e che porta alla pagina dei tornei del gioco
 	const handleClickCard = () => {
-		navigate(`/games/${id}`, { state: { img: img, title: title, id: id } });
+		navigate(`/games/${id}`, { state: { img: img, title: title, id: id, background: background } });
 	};
 	//require("../../assets/images/" + img)
 	return (

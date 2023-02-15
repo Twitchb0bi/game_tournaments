@@ -32,10 +32,11 @@ export default function Home() {
 				page +
 				"&search=" +
 				text +
-				"&search_precise=false&search_exact=false&page_size=24&exclude_additions=true&exclude_parents=true&exclude_games=true&exclude_dlc=true&exclude_expansions=true&metacritic=90,100"
+				"&search_precise=false&search_exact=false&tags=multiplayer&page_size=30&dates=2023-1-1.2023-01-01&exclude_additions=true&ordering=-metacritic&metacritic=70,100&platforms=4,187,1,18,186,5,6,14,16"
 		);
 		if (response.status == 200) {
 			let data = await response.json();
+
 			setAllGames(data.results);
 			setLoading(false);
 		} else {
@@ -75,6 +76,7 @@ export default function Home() {
 					{allGames.map((game) => (
 						<CardGame
 							key={game.id.toString()}
+							background={game.short_screenshots[1]?.image}
 							img={game.background_image}
 							id={game.id.toString()}
 							title={game.name}

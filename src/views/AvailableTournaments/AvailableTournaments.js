@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, Table } from "reactstrap";
-
+import { faker } from "@faker-js/faker";
 import style from "./AvailableTournaments.module.css";
 
 let arr = [
@@ -35,6 +35,7 @@ export default function AvailableTournaments() {
 		{ name: "Starting", dir: "" },
 		{ name: "Enrolled", dir: "" },
 	]);
+	const [tournament, setTournament] = useState([]);
 	const [infoGioco, setInfoGioco] = useState(location.state);
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
@@ -53,22 +54,58 @@ export default function AvailableTournaments() {
 		setHeaderTabella(arr);
 	};
 
-	const handleClickJoin = (tournamentId) => {
-		navigate(`/tournament/${tournamentId}`);
+	//Funzione che gestisce il click sul bottone "View" di un torneo
+	const handleClickJoin = (tournamentInfo) => {
+		navigate(`/tournament/${tournamentInfo.tournamentId}`, {
+			state: { ...tournamentInfo, ...infoGioco },
+		});
 	};
 
+	useEffect(() => {
+		let arr = [];
+		//Creo un array di tornei random (da 1 a 10)
+		for (let i = 0; i < Math.floor(Math.random() * 10) + 1; i++) {
+			arr.push(createRandomTournaments());
+		}
+		//ordino per data di inizio
+		arr.sort((a, b) => {
+			return a.starting - b.starting;
+		});
+		setTournament(arr);
+	}, []);
+
+	//Funzione che crea un torneo random
+	const createRandomTournaments = () => {
+		let enrolled = faker.datatype.number({ min: 0, max: 50 });
+		let maxTeams = faker.datatype.number({
+			min: enrolled,
+			max: enrolled + faker.datatype.number({ min: 1, max: 50 }),
+		});
+		const teamSize = faker.datatype.number({ min: 1, max: 2 });
+		const totalEarnings = faker.datatype.number({ min: 1, max: 100 });
+		return {
+			tournamentId: faker.datatype.uuid(),
+			entryFee: faker.datatype.number({ min: 0, max: 100 }),
+			teamSize: teamSize,
+			totalEarnings: totalEarnings,
+			firstEarnings: (totalEarnings * 0.5).toFixed(0),
+			secondEarnings: (totalEarnings * 0.3).toFixed(0),
+			thirdEarnings: (totalEarnings * 0.2).toFixed(0),
+
+			tournamentTitle: infoGioco.title + " - " + teamSize + "V" + teamSize,
+			starting: faker.date.soon(7),
+			enrolled: enrolled,
+			maxTeams: maxTeams,
+		};
+	};
 	//require("../../assets/images/largeRL.jpg")
 	return (
 		<div className={style.container_game_info}>
-			<img src={infoGioco.img} className={style.img_copertina} />
+			<img src={infoGioco.background} className={style.img_copertina} alt={infoGioco.title} />
 			<div className={style.container_info}>
 				<div className={style.container_img_titolo}>
 					<div className={style.container_card}>
-						<img
-							src={require("../../assets/images/copertinaRocketLeague.jpg")}
-							alt={"Rocket League"}
-							className={style.img_card}
-						/>
+						<img src={infoGioco.img} alt={infoGioco.title} className={style.img_card} />
 					</div>
 					<h1>{infoGioco.title}</h1>
 				</div>
@@ -76,11 +113,12 @@ export default function AvailableTournaments() {
 			</div>
 			<div className={style.container_partite_disponibili}>
 				<div className={style.container_tabella}>
-					<Table responsive hover>
+					<Table responsive hover size={"md"} className={style.table}>
 						<thead>
 							<tr>
 								{headerTabella.map((header) => (
 									<th
+										key={header.name}
 										onClick={() => {
 											handleClickHeader(header);
 										}}
@@ -99,20 +137,20 @@ export default function AvailableTournaments() {
 							</tr>
 						</thead>
 						<tbody>
-							{arr.map((tournament) => (
-								<tr>
-									<td scope="row">{tournament.entryFee} $</td>
+							{tournament.map((tournament) => (
+								<tr key={tournament.id}>
+									<td scope="row">€ {tournament.entryFee}</td>
 									<td>{tournament.teamSize}</td>
-									<td>{tournament.competition}</td>
-									<td>{tournament.starting}</td>
-									<td>{tournament.enrolled}</td>
+									<td>{tournament.tournamentTitle}</td>
+									<td>{tournament.starting.toLocaleString()}</td>
+									<td>{tournament.enrolled + "/" + tournament.maxTeams}</td>
 									<td>
 										<Button
 											color="success"
 											onClick={() => {
-												handleClickJoin(tournament.id);
+												handleClickJoin(tournament);
 											}}>
-											Join
+											View
 										</Button>
 									</td>
 								</tr>
