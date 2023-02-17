@@ -32,26 +32,28 @@ export default function TournamentBracket({ matches }) {
 	}, []);
 
 	return (
-		<SingleEliminationBracket
-			matches={matches}
-			matchComponent={Match}
-			options={{
-				style: {
-					round: {
-						spacing: 30,
+		<div className={style.container_bracket}>
+			<SingleEliminationBracket
+				matches={matches}
+				matchComponent={Match}
+				options={{
+					style: {
+						round: {
+							spacing: 30,
+						},
 					},
-				},
-			}}
-			svgWrapper={({ children, ...props }) => (
-				<SVGViewer
-					width={screenDimension.innerWidth}
-					height={screenDimension.innerHeight}
-					{...props}
-					background="#bbd6f90d"
-					SVGBackground="#bbd6f90d">
-					{children}
-				</SVGViewer>
-			)}
-		/>
+				}}
+				// svgWrapper={({ children, ...props }) => (
+				// 	<SVGViewer
+				// 		width={screenDimension.innerWidth}
+				// 		height={screenDimension.innerHeight}
+				// 		{...props}
+				// 		background="#bbd6f90d"
+				// 		SVGBackground="#bbd6f90d">
+				// 		{children}
+				// 	</SVGViewer>
+				// )}
+			/>
+		</div>
 	);
 }

@@ -6,6 +6,7 @@ import AvailableTournaments from "../AvailableTournaments/AvailableTournaments";
 import TournamentInfo from "../TournamentInfo/TournamentInfo";
 import Ladder from "../Ladder/Ladder";
 import UsernameCreation from "../UsernameCreation/UsernameCreation";
+import CreateTeam from "../CreateTeam/CreateTeam";
 export default function Logged() {
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Logged() {
 				<MainTemplate navItems={nav}>
 					<Routes>
 						<Route path="/" element={<Home />} />
-						<Route path="/create" element={<UsernameCreation />} />
+						<Route path="/createTeam" element={<CreateTeam />} />
 						<Route path="/games" element={<Home />} />
 						<Route path="/games/:id" element={<AvailableTournaments />} />
 						<Route path="/tournament/:id" element={<TournamentInfo />} />

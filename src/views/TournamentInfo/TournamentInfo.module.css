@@ -15,6 +15,8 @@
 	justify-content: center;
 	margin-top: 20px;
 	margin-bottom: 50px;
+	border-radius: 10px;
+	background-color: #bbd6f90d;
 }
 
 .container_tournament_header {
@@ -180,6 +182,8 @@ h4 {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+
+	flex-wrap: wrap;
 	gap: 10px;
 }
 .container_card_info {
@@ -202,6 +206,17 @@ h4 {
 	flex: 0.8;
 	flex-wrap: wrap;
 }
+@media screen and (min-width: 860px) {
+	.container_cards_info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: 100%;
+		gap: 10px;
+		flex: 0.8;
+		flex-wrap: wrap;
+	}
+}
 @media screen and (max-width: 860px) {
 	.container_cards_info {
 		display: flex;
@@ -218,4 +233,21 @@ h4 {
 		align-items: center;
 		justify-content: center;
 	}
+}
+
+.container_join_button {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.container_join_button > button {
+	min-width: 130px;
+	height: 50px;
+	font-size: 1.2rem;
+	box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px,
+		rgb(0 0 0 / 12%) 0px 1px 10px 0px;
 }

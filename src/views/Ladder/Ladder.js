@@ -23,6 +23,7 @@ export default function Ladder() {
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
+		if (header.dir == undefined) return;
 		// console.log(headerTabella);
 		let nextHeader = {};
 		let arr = headerTabella.map((h) => {
@@ -32,7 +33,9 @@ export default function Ladder() {
 				if (h.dir === "desc") obj.dir = "";
 				if (h.dir === "") obj.dir = "asc";
 				nextHeader = obj;
-			} else obj.dir = "";
+			} else {
+				if (obj.dir != undefined) obj.dir = "";
+			}
 			return obj;
 		});
 		sortTable(nextHeader);

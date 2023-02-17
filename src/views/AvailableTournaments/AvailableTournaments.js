@@ -6,34 +6,15 @@ import { Button, Table } from "reactstrap";
 import { faker } from "@faker-js/faker";
 import style from "./AvailableTournaments.module.css";
 
-let arr = [
-	{
-		id: 1,
-		entryFee: 100,
-		teamSize: 2,
-		competition: "Rocket League",
-		enrolled: "25/30",
-		starting: "2020-10-10 10:00:00",
-	},
-	{
-		id: 2,
-		entryFee: 100,
-		teamSize: 2,
-		competition: "Rocket League",
-		enrolled: "25/30",
-		starting: "2020-10-10 10:00:00",
-	},
-];
 export default function AvailableTournaments() {
-	let { id } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [headerTabella, setHeaderTabella] = useState([
-		{ name: "Entry Fee", dir: "" },
-		{ name: "Team Size", dir: "" },
+		{ name: "Entry Fee", title: "entryFee", dir: "" },
+		{ name: "Team Size", title: "teamSize", dir: "" },
 		{ name: "Competition" },
-		{ name: "Starting", dir: "" },
-		{ name: "Enrolled", dir: "" },
+		{ name: "Starting", title: "starting", dir: "" },
+		{ name: "Enrolled", title: "enrolled", dir: "" },
 	]);
 	const [tournament, setTournament] = useState([]);
 	const [infoGioco, setInfoGioco] = useState(location.state);
@@ -41,21 +22,25 @@ export default function AvailableTournaments() {
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
 		// console.log(headerTabella);
+		if (header.dir == undefined) return;
+		let nuovoHeader = {};
 		let arr = headerTabella.map((h) => {
 			let obj = { ...h };
 			if (h.name === header.name) {
 				if (h.dir === "asc") obj.dir = "desc";
 				if (h.dir === "desc") obj.dir = "";
 				if (h.dir === "") obj.dir = "asc";
-			}
+				nuovoHeader = obj;
+			} else if (obj.dir != undefined) obj.dir = "";
 
 			return obj;
 		});
+		sortTable(nuovoHeader);
 		setHeaderTabella(arr);
 	};
 
 	//Funzione che gestisce il click sul bottone "View" di un torneo
-	const handleClickJoin = (tournamentInfo) => {
+	const handleClickView = (tournamentInfo) => {
 		navigate(`/tournament/${tournamentInfo.tournamentId}`, {
 			state: { ...tournamentInfo, ...infoGioco },
 		});
@@ -93,12 +78,33 @@ export default function AvailableTournaments() {
 			thirdEarnings: (totalEarnings * 0.2).toFixed(0),
 
 			tournamentTitle: infoGioco.title + " - " + teamSize + "V" + teamSize,
-			starting: faker.date.soon(7),
+			starting: faker.date.soon(3),
 			enrolled: enrolled,
 			maxTeams: maxTeams,
 		};
 	};
-	//require("../../assets/images/largeRL.jpg")
+
+	//Funzione che ordina la tabella in base all`header cliccato
+	const sortTable = (header) => {
+		let arr = [...tournament];
+		if (header.dir === "asc") {
+			arr.sort((a, b) => {
+				if (a[header.title] < b[header.title]) return -1;
+				if (a[header.title] > b[header.title]) return 1;
+				return 0;
+			});
+		} else if (header.dir === "desc") {
+			arr.sort((a, b) => {
+				if (a[header.title] > b[header.title]) return -1;
+				if (a[header.title] < b[header.title]) return 1;
+				return 0;
+			});
+		}
+		setTournament(arr);
+
+		// console.log(arr);
+	};
+
 	return (
 		<div className={style.container_game_info}>
 			<img src={infoGioco.background} className={style.img_copertina} alt={infoGioco.title} />
@@ -148,7 +154,7 @@ export default function AvailableTournaments() {
 										<Button
 											color="success"
 											onClick={() => {
-												handleClickJoin(tournament);
+												handleClickView(tournament);
 											}}>
 											View
 										</Button>

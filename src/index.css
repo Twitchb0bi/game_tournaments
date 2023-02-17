@@ -37,6 +37,9 @@ code {
 .mt-20 {
 	margin-top: 20px;
 }
+.mt-30 {
+	margin-top: 30px;
+}
 .mt-40 {
 	margin-top: 40px;
 }
@@ -48,6 +51,9 @@ code {
 }
 .mr-10 {
 	margin-right: 10px;
+}
+.mb-0 {
+	margin-bottom: 0px;
 }
 .separator {
 	width: 100%;
@@ -68,4 +74,19 @@ code {
 }
 .border-radius-10 {
 	border-radius: 10px;
+}
+.button {
+	background-color: #142238 !important;
+	color: #071221;
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+}
+.button:hover {
+	background-color: #1a2d4c !important;
+}
+.text-align-left {
+	text-align: left;
 }
