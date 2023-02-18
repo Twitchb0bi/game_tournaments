@@ -21,7 +21,6 @@ export default function AvailableTournaments() {
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
-		// console.log(headerTabella);
 		if (header.dir == undefined) return;
 		let nuovoHeader = {};
 		let arr = headerTabella.map((h) => {
@@ -101,8 +100,6 @@ export default function AvailableTournaments() {
 			});
 		}
 		setTournament(arr);
-
-		// console.log(arr);
 	};
 
 	return (

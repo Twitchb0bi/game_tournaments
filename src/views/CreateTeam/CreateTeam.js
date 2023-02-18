@@ -11,16 +11,18 @@ export default function CreateTeam() {
 	const [disabled, setDisabled] = useState(true);
 	const [inputFields, setInputFields] = useState([]);
 	const navigate = useNavigate();
-
-	//Controllo anche che siano presenti le informazioni del torneo altrimenti torno indietro
-	//Se ho già creato il team, torno indietro
+	const teamName = useRef("");
 	//Creo dinamicamente gli input in base alla grandezza del team richiesto per il torneo
 	useEffect(() => {
+		//Controllo che siano presenti le informazioni del torneo altrimenti torno indietro
 		if (!tournamentInfo.tournamentId) navigate("/");
+		//Se ho già creato il team, torno indietro
 		if (localStorage.getItem(tournamentInfo.tournamentId))
 			navigate("/tournament/" + tournamentInfo.tournamentId, { state: tournamentInfo });
 		let a = [];
 		let obj = {};
+
+		//Creo gli input in base alla grandezza del team richiesto per il torneo
 		for (let i = 0; i < tournamentInfo.teamSize; i++) {
 			obj[i] = "";
 			if (i === 0) obj[i] = localStorage.getItem("username");
@@ -42,12 +44,12 @@ export default function CreateTeam() {
 	//Funzione che gestisce la modifica dell`username
 	const handleChangeValueUsername = (value, index) => {
 		usernameList.current[index] = value;
-		checkUsernameList();
+		validateInput();
 	};
 
 	//Funzione che controlla se abbiamo inserito tutti i valori degli username
 	//Se non abbiamo inserito tutti gli username, il bottone per creare il team rimane disabilitato
-	const checkUsernameList = () => {
+	const validateInput = () => {
 		let keys = Object.keys(usernameList.current);
 		for (let i = 0; i < keys.length; i++) {
 			if (usernameList.current[keys[i]].replace(" ", "") === "") {
@@ -55,12 +57,20 @@ export default function CreateTeam() {
 				return;
 			}
 		}
+		let name = teamName.current;
+		if (name.replace(" ", "") === "") {
+			setDisabled(true);
+			return;
+		}
 		setDisabled(false);
 	};
-
 	//Funzione che conferma la creazione del team
 	const createTeam = () => {
-		localStorage.setItem(tournamentInfo.tournamentId, JSON.stringify(usernameList.current));
+		let obj = {
+			teamList: usernameList.current,
+			teamName: teamName.current,
+		};
+		localStorage.setItem(tournamentInfo.tournamentId, JSON.stringify(obj));
 		navigate("/tournament/" + tournamentInfo.tournamentId, { state: tournamentInfo });
 	};
 	return (
@@ -75,7 +85,13 @@ export default function CreateTeam() {
 						<InputGroupText>
 							<FontAwesomeIcon icon={faPeopleGroup} color={"black"} />
 						</InputGroupText>
-						<Input placeholder="Team Name" />
+						<Input
+							placeholder="Team Name"
+							onChange={(e) => {
+								teamName.current = e.target.value;
+								validateInput();
+							}}
+						/>
 					</InputGroup>
 				</div>
 				<div className="separator mt-10" />

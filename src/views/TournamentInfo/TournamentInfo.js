@@ -210,7 +210,7 @@ export default function TournamentInfo() {
 	const team = useRef();
 
 	useEffect(() => {
-		team.current = localStorage.getItem(tournamentInfo.tournamentId);
+		team.current = JSON.parse(localStorage.getItem(tournamentInfo.tournamentId));
 		if (team.current) setEnrolled(true);
 		//se premo il tasto f parte il torneo (solo per testare e per non aspettare il countdown)
 		document.onkeydown = (e) => {
@@ -218,7 +218,6 @@ export default function TournamentInfo() {
 				startTournament();
 			}
 		};
-		createBracket();
 	}, []);
 	//Fuzione che modifica la data di inizio del torneo all'ora attuale
 	const startTournament = () => {
@@ -227,27 +226,9 @@ export default function TournamentInfo() {
 	//Funzione che gestisce la fine del countdown
 	const handleCountdownEnd = () => {
 		setTournamentStarted(true);
+		createBracket();
 	};
-	/*
-	{
-		id: 19754,
-		nextMatchId: 19753,
-		tournamentRoundText: "2",
-		startTime: "2021-05-30",
-		state: "SCHEDULED",
-		participants: [
-			{
-				id: "14754a1a-932c-4992-8dec-f7f94a339960",
-				resultText: null,
-				isWinner: false,
-				status: null,
-				name: "CoKe BoYz s",
-				picture: "teamlogos/client_team_default_logo",
-			},
-		],
-	},
-
-*/
+	//Funzione che crea il bracket del torneo usando dei dati falsi
 	const createBracket = () => {
 		let bracket = [];
 		let partecipant = [];
@@ -257,6 +238,16 @@ export default function TournamentInfo() {
 			Math.ceil(Math.log(tournamentInfo.enrolled) / Math.log(2))
 		);
 		var rounds = Math.log(massimoNumeroPartecipanti) / Math.log(2);
+
+		//Se il team è iscritto lo aggiungo al bracket
+		if (team.current) {
+			//Diminuisco il numero di partecipanti che dovrò creare
+			--massimoNumeroPartecipanti;
+			partecipant.push({
+				id: localStorage.getItem("username"),
+				name: team.current.teamName,
+			});
+		}
 		//Creo i finti partecipanti
 		for (let i = 0; i < massimoNumeroPartecipanti; i++) {
 			if (i < tournamentInfo.enrolled) {
@@ -273,97 +264,31 @@ export default function TournamentInfo() {
 				});
 			}
 		}
-		//Se sono iscritto mi aggiungo
-		// if (team.current)
-		// 	partecipant.push({
-		// 		id: localStorage.getItem("username"),
-		// 		name: team.current[0],
-		// 	});
-
-		// for (let i = 1; i < rounds + 1; i++) {
-		// 	if (i == rounds) {
-		// 		//Creo gli accoppiamenti
-		// 		let accoppiamenti = seeding(massimoNumeroPartecipanti);
-		// 		//Creo il primo round
-		// 		for (let i = 1; i < accoppiamenti.length + 1; i += 2) {
-		// 			let status = "SCHEDULED";
-		// 			let partecipanti = [];
-		// 			//Se esiste il partecipante allo lo inserisco
-		// 			if (partecipant[accoppiamenti[i] - 1] != undefined)
-		// 				partecipanti.push({
-		// 					id: partecipant[accoppiamenti[i] - 1].id,
-		// 					resultText: null,
-		// 					isWinner: false,
-		// 					status: null,
-		// 					name: partecipant[accoppiamenti[i] - 1].name,
-		// 					picture: "teamlogos/client_team_default_logo",
-		// 				});
-
-		// 			//Se esiste il partecipante allo lo inserisco
-		// 			if (partecipant[accoppiamenti[i + 1] - 1] != undefined)
-		// 				partecipanti.push({
-		// 					id: partecipant[accoppiamenti[i + 1] - 1].id,
-		// 					resultText: null,
-		// 					isWinner: false,
-		// 					status: null,
-		// 					name: partecipant[accoppiamenti[i + 1] - 1].name,
-		// 					picture: "teamlogos/client_team_default_logo",
-		// 				});
-
-		// 			//Se c'è un solo sfidante allora è un walk over (Vittoria a tavolino di chi è presente)
-		// 			if (partecipanti.length == 1) status = "WALK_OVER";
-
-		// 			let nextMatchId = "Round 1" + " Match " + Number(Math.ceil(i / 4));
-		// 			let obj = {
-		// 				id: faker.datatype.uuid(),
-		// 				nextMatchId: nextMatchId,
-		// 				tournamentRoundText: 0,
-		// 				startTime: "2021-05-30",
-		// 				state: status,
-		// 				participants: partecipanti,
-		// 			};
-		// 			bracket.push(obj);
-		// 		}
-		// 	} else {
-		// 		//Creo i match successivi al primo round
-		// 		for (let j = 1; j <= Math.pow(2, i) / 2; j++) {
-		// 			let nextMatchId = null;
-		// 			//Se non è il primo round allora ha un match successivo e il suo id è il numero del round + il match
-		// 			if (i != 1)
-		// 				nextMatchId = "Round " + Number(rounds - i + 1) + " Match " + Number(Math.ceil(j / 2));
-		// 			// Se è il primo round non ha un match successivo
-		// 			if (i == 1) nextMatchId = null;
-		// 			bracket.push({
-		// 				id: "Round " + Number(rounds - i) + " Match " + j,
-		// 				nextMatchId: nextMatchId,
-		// 				tournamentRoundText: rounds - i,
-		// 				startTime: "2021-05-30",
-		// 				state: "SCHEDULED",
-		// 				participants: [],
-		// 			});
-		// 		}
-		// 	}
-		// }
+		//console.log(partecipant)
 		for (let i = 1; i < rounds + 1; i++) {
 			if (i == 1)
 				for (let j = 0; j < partecipant.length; j += 2) {
 					let status = "SCORE_DONE";
 					let randomNumber = Math.random();
 					let partecipanti = [];
-					partecipanti.push({
+					let obj1 = {
 						id: partecipant[j]?.id || null,
 						resultText: randomNumber > 0.5 ? "Won" : "Lost",
 						isWinner: randomNumber > 0.5 ? true : false,
 						status: "PLAYED",
 						name: partecipant[j]?.name || "TBD",
-					});
-					partecipanti.push({
+					};
+					let obj2 = {
 						id: partecipant[j + 1]?.id || null,
 						resultText: randomNumber > 0.5 ? "Lost" : "Won",
 						isWinner: randomNumber > 0.5 ? false : true,
 						status: "PLAYED",
 						name: partecipant[j + 1]?.name || "TBD",
-					});
+					};
+					if (obj1.name != "TBD") partecipanti.push(obj1);
+					if (obj2.name != "TBD") partecipanti.push(obj2);
+
+					if (partecipanti.length != 2) status = "WALK_OVER";
 					let nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.floor(j / 4 + 1));
 					let obj = {
 						id: "Round " + 1 + " Match " + Number(Math.ceil(j / 2) + 1),
@@ -379,7 +304,6 @@ export default function TournamentInfo() {
 				//Creo gli altri match
 				for (let j = 1; j <= Math.pow(2, rounds - i); j++) {
 					let nextMatchId = null;
-					//Se non è il primo round allora ha un match successivo e il suo id è il numero del round + il match
 
 					// // Se è l`ultimo round allora non ha un match successivo   (e` la finale)
 					if (i == rounds) nextMatchId = null;
@@ -389,32 +313,42 @@ export default function TournamentInfo() {
 					let partecipanti = [];
 					let offset = 0;
 					if (i > 2) offset = calcolaOffset(rounds, i);
-					console.log(offset);
 					const startIndex = offset + 2 * (j - 1);
 					let match1 = bracket[startIndex];
 					let match2 = bracket[startIndex + 1];
 					let randomNumber = Math.random();
+					let partecipant1 = null;
+					let partecipant2 = null;
 					for (let k = 0; k < match1.participants.length; k++) {
 						if (match1.participants[k].isWinner) {
-							partecipanti.push({
+							partecipant1 = {
 								...match1.participants[k],
 								resultText: randomNumber >= 0.5 ? "Won" : "Lost",
 								isWinner: randomNumber >= 0.5 ? true : false,
 								status: "PLAYED",
-							});
+							};
 						}
 					}
 					for (let k = 0; k < match2.participants.length; k++) {
 						if (match2.participants[k].isWinner) {
-							partecipanti.push({
+							partecipant2 = {
 								...match2.participants[k],
 								resultText: randomNumber < 0.5 ? "Won" : "Lost",
 								isWinner: randomNumber < 0.5 ? true : false,
 								status: "PLAYED",
-							});
+							};
 						}
 					}
+					if (partecipant1) partecipanti.push(partecipant1);
+					if (partecipant2) partecipanti.push(partecipant2);
+
 					let status = "SCORE_DONE";
+					if (partecipanti.length == 1) {
+						status = "WALK_OVER";
+						partecipanti[0].isWinner = true;
+						partecipanti[0].resultText = "Won";
+					}
+
 					bracket.push({
 						id: "Round " + i + " Match " + j,
 						nextMatchId: nextMatchId,
@@ -426,7 +360,7 @@ export default function TournamentInfo() {
 				}
 			}
 		}
-		console.log(bracket);
+		//console.log(bracket);
 		setBracket(bracket);
 	};
 	//Funzione che calcola l`offset da cui partire per prendere i partecipanti

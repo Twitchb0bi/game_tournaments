@@ -24,7 +24,6 @@ export default function Ladder() {
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
 		if (header.dir == undefined) return;
-		// console.log(headerTabella);
 		let nextHeader = {};
 		let arr = headerTabella.map((h) => {
 			let obj = { ...h };
