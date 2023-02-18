@@ -24,6 +24,7 @@ export default function TournamentInfo() {
 	});
 	const [bracket, setBracket] = useState([]);
 	const [enrolled, setEnrolled] = useState(false);
+	const [currentMatch, setCurrentMatch] = useState();
 	const team = useRef();
 
 	useEffect(() => {
@@ -63,6 +64,7 @@ export default function TournamentInfo() {
 			partecipant.push({
 				id: localStorage.getItem("username"),
 				name: team.current.teamName,
+				img: faker.image.avatar(),
 			});
 		}
 		//Creo i finti partecipanti
@@ -72,6 +74,7 @@ export default function TournamentInfo() {
 				let obj = {
 					id: id,
 					name: faker.internet.userName(),
+					img: faker.image.avatar(),
 				};
 				partecipant.push(obj);
 			} else {
@@ -94,6 +97,7 @@ export default function TournamentInfo() {
 						isWinner: randomNumber > 0.5 ? true : false,
 						status: "PLAYED",
 						name: partecipant[j]?.name || "TBD",
+						img: partecipant[j]?.img || null,
 					};
 					let obj2 = {
 						id: partecipant[j + 1]?.id || null,
@@ -101,6 +105,7 @@ export default function TournamentInfo() {
 						isWinner: randomNumber > 0.5 ? false : true,
 						status: "PLAYED",
 						name: partecipant[j + 1]?.name || "TBD",
+						img: partecipant[j + 1]?.img || null,
 					};
 					if (obj1.name != "TBD") partecipanti.push(obj1);
 					if (obj2.name != "TBD") partecipanti.push(obj2);
@@ -182,6 +187,8 @@ export default function TournamentInfo() {
 			}
 		}
 		//console.log(bracket);
+		//Imposto il match corrente come il match finale
+		setCurrentMatch(bracket[bracket.length - 1]);
 		setBracket(bracket);
 	};
 	//Funzione che calcola l`offset da cui partire per prendere i partecipanti
@@ -314,10 +321,46 @@ export default function TournamentInfo() {
 						)}
 					</div>
 				)}
+
+				{tournamentStarted && currentMatch && (
+					<>
+						<h2 className="mt-20 text-white">Current Match</h2>
+						<div className={style.container_next_match}>
+							<div className={style.container_partecipante}>
+								<img
+									src={currentMatch.participants[0].img}
+									width={60}
+									height={60}
+									className={"mb-10"}
+								/>
+								<h4 className="mb-0">{currentMatch.participants[0].name}</h4>
+							</div>
+							<div className={style.container_risultato_match}>
+								<h3 className={"text-white " + style.status_match}>
+									{currentMatch.state.replace(/_/g, " ")}
+								</h3>
+								<h1 className={"text-white text-center " + style.match_result}>2 : 1</h1>
+							</div>
+							<div className={style.container_partecipante}>
+								<img
+									src={currentMatch.participants[1].img}
+									width={60}
+									height={60}
+									className={"mb-10"}
+								/>
+								<h4 className="mb-0">{currentMatch.participants[1].name}</h4>
+							</div>
+						</div>
+					</>
+				)}
+
 				{tournamentStarted && bracket.length > 0 && (
-					<div className={style.container_bracket}>
-						<TournamentBracket matches={bracket} />
-					</div>
+					<>
+						<h2 className="mt-20 text-white">Bracket</h2>
+						<div className={style.container_bracket}>
+							<TournamentBracket matches={bracket} />
+						</div>
+					</>
 				)}
 			</div>
 		</div>

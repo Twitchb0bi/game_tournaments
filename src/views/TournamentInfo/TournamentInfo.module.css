@@ -13,7 +13,6 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	margin-top: 20px;
 	margin-bottom: 50px;
 	border-radius: 10px;
 	background-color: #bbd6f90d;
@@ -151,7 +150,6 @@ h4 {
 	align-items: center;
 	justify-content: space-between;
 	gap: 10px;
-	padding: 20px;
 	flex: 0.2;
 }
 .container_details_prize {
@@ -254,4 +252,47 @@ h4 {
 .button {
 	min-width: 200px;
 	height: 50px;
+}
+.container_next_match {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 125px;
+	border-radius: 10px;
+	padding: 20px;
+	background-color: #bbd6f90d;
+}
+.container_next_match img {
+	border-radius: 10px;
+}
+.container_partecipante {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 10px;
+}
+
+.container_risultato_match {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.status_match {
+	font-size: 0.8rem;
+	font-weight: 500;
+	padding: 5px;
+	border-radius: 10px;
+	background-color: green;
+	color: white !important;
+}
+.match_result {
+	letter-spacing: 1vw;
+}
+@media screen and (max-width: 400px) {
+	.match_result {
+		letter-spacing: unset;
+	}
 }
