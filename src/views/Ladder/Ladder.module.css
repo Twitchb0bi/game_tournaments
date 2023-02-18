@@ -11,6 +11,7 @@
 	background-color: #bbd6f90d;
 	border-radius: 10px;
 	padding: 20px;
+	overflow-x: auto;
 }
 .container_tabella thead tr th {
 	user-select: none;
@@ -44,4 +45,8 @@
 	flex-wrap: wrap;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+.table {
+	min-width: 600px;
+	overflow-x: auto;
 }

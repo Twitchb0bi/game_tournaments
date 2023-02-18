@@ -127,7 +127,7 @@ export default function Ladder() {
 				</div>
 				{viewType === "table" && (
 					<div className={style.container_tabella}>
-						<Table responsive hover>
+						<Table responsive hover className={style.table}>
 							<thead>
 								<tr>
 									{headerTabella.map((header) => (
