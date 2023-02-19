@@ -13,7 +13,7 @@ import {
 	faUsers,
 	faWallet,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "reactstrap";
 
 export default function TournamentInfo() {
@@ -86,7 +86,7 @@ export default function TournamentInfo() {
 		}
 		//console.log(partecipant)
 		for (let i = 1; i < rounds + 1; i++) {
-			if (i == 1)
+			if (i === 1)
 				for (let j = 0; j < partecipant.length; j += 2) {
 					let status = "SCORE_DONE";
 					let randomNumber = Math.random();
@@ -107,10 +107,10 @@ export default function TournamentInfo() {
 						name: partecipant[j + 1]?.name || "TBD",
 						img: partecipant[j + 1]?.img || null,
 					};
-					if (obj1.name != "TBD") partecipanti.push(obj1);
-					if (obj2.name != "TBD") partecipanti.push(obj2);
+					if (obj1.name !== "TBD") partecipanti.push(obj1);
+					if (obj2.name !== "TBD") partecipanti.push(obj2);
 
-					if (partecipanti.length == 1) {
+					if (partecipanti.length === 1) {
 						status = "WALK_OVER";
 						partecipanti[0].isWinner = true;
 						partecipanti[0].resultText = "Won";
@@ -132,7 +132,7 @@ export default function TournamentInfo() {
 					let nextMatchId = null;
 
 					// // Se è l`ultimo round allora non ha un match successivo   (e` la finale)
-					if (i == rounds) nextMatchId = null;
+					if (i === rounds) nextMatchId = null;
 					else nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.ceil(j / 2));
 					//ottengo i partecipanti che hanno vinto il match precedente
 					// 2 * (i - 1)
@@ -169,7 +169,7 @@ export default function TournamentInfo() {
 					if (partecipant2) partecipanti.push(partecipant2);
 
 					let status = "SCORE_DONE";
-					if (partecipanti.length == 1) {
+					if (partecipanti.length === 1) {
 						status = "WALK_OVER";
 						partecipanti[0].isWinner = true;
 						partecipanti[0].resultText = "Won";
@@ -288,15 +288,27 @@ export default function TournamentInfo() {
 						</div>
 						<div className={style.container_prize}>
 							<div className={style.container_prize_item}>
-								<img src={require("../../assets/images/second.png")} width={80} />
+								<img
+									src={require("../../assets/images/second.png")}
+									width={80}
+									alt={"Second place"}
+								/>
 								<span>€ {tournamentInfo.secondEarnings}</span>
 							</div>
 							<div className={style.container_prize_item}>
-								<img src={require("../../assets/images/first.png")} width={100} />
+								<img
+									src={require("../../assets/images/first.png")}
+									width={100}
+									alt={"First place"}
+								/>
 								<span>€ {tournamentInfo.firstEarnings}</span>
 							</div>
 							<div className={style.container_prize_item}>
-								<img src={require("../../assets/images/third.png")} width={75} />
+								<img
+									src={require("../../assets/images/third.png")}
+									width={75}
+									alt={"Third place"}
+								/>
 								<span>€{tournamentInfo.thirdEarnings}</span>
 							</div>
 						</div>
@@ -332,6 +344,7 @@ export default function TournamentInfo() {
 									width={60}
 									height={60}
 									className={"mb-10"}
+									alt={"Team " + currentMatch.participants[0].name}
 								/>
 								<h4 className="mb-0">{currentMatch.participants[0].name}</h4>
 							</div>
@@ -347,6 +360,7 @@ export default function TournamentInfo() {
 									width={60}
 									height={60}
 									className={"mb-10"}
+									alt={"Team " + currentMatch.participants[1].name}
 								/>
 								<h4 className="mb-0">{currentMatch.participants[1].name}</h4>
 							</div>

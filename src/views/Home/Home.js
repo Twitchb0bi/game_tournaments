@@ -32,9 +32,9 @@ export default function Home() {
 				page +
 				"&search=" +
 				text +
-				"&search_precise=false&search_exact=false&tags=multiplayer&page_size=30&dates=2023-1-1.2023-01-01&exclude_additions=true&ordering=-metacritic&metacritic=70,100&platforms=4,187,1,18,186,5,6,14,16"
+				"&search_precise=true&search_exact=false&tags=multiplayer&page_size=30&dates=2023-1-1.2023-01-01&exclude_additions=true&ordering=-metacritic&metacritic=70,100&platforms=4,187,1,18,186,5,6,14,16"
 		);
-		if (response.status == 200) {
+		if (response.status === 200) {
 			let data = await response.json();
 
 			setAllGames(data.results);

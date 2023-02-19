@@ -21,7 +21,7 @@ export default function AvailableTournaments() {
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
-		if (header.dir == undefined) return;
+		if (header.dir === undefined) return;
 		let nuovoHeader = {};
 		let arr = headerTabella.map((h) => {
 			let obj = { ...h };
@@ -30,7 +30,7 @@ export default function AvailableTournaments() {
 				if (h.dir === "desc") obj.dir = "";
 				if (h.dir === "") obj.dir = "asc";
 				nuovoHeader = obj;
-			} else if (obj.dir != undefined) obj.dir = "";
+			} else if (obj.dir !== undefined) obj.dir = "";
 
 			return obj;
 		});
@@ -125,7 +125,7 @@ export default function AvailableTournaments() {
 										onClick={() => {
 											handleClickHeader(header);
 										}}
-										className={header.dir != undefined ? "pointer" : ""}>
+										className={header.dir !== undefined ? "pointer" : ""}>
 										{header.name}
 										{header.dir === "asc" && (
 											<FontAwesomeIcon icon={faArrowUp} className={"ml-5"} />

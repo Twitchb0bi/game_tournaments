@@ -23,7 +23,7 @@ export default function Ladder() {
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
-		if (header.dir == undefined) return;
+		if (header.dir === undefined) return;
 		let nextHeader = {};
 		let arr = headerTabella.map((h) => {
 			let obj = { ...h };
@@ -33,7 +33,7 @@ export default function Ladder() {
 				if (h.dir === "") obj.dir = "asc";
 				nextHeader = obj;
 			} else {
-				if (obj.dir != undefined) obj.dir = "";
+				if (obj.dir !== undefined) obj.dir = "";
 			}
 			return obj;
 		});
@@ -103,26 +103,28 @@ export default function Ladder() {
 	return (
 		<div className={style.container_ladder}>
 			<div className={style.container_utenti}>
-				<h1 className="text-white mt-40">Rankings</h1>
-				<div className={style.container_view_option}>
-					<div
-						className={viewType == "table" ? style.selected : ""}
-						onClick={() => {
-							handleClickView("table");
-						}}>
-						<FontAwesomeIcon icon={faBars} size={"lg"} color={"white"} className={"pointer"} />
-					</div>
-					<div
-						className={viewType == "card" ? style.selected : ""}
-						onClick={() => {
-							handleClickView("card");
-						}}>
-						<FontAwesomeIcon
-							icon={faTableCellsLarge}
-							size={"lg"}
-							color={"white"}
-							className={"pointer"}
-						/>
+				<div className={style.container_title_option}>
+					<h1 className="text-white">Rankings</h1>
+					<div className={style.container_view_option}>
+						<div
+							className={viewType === "table" ? style.selected : ""}
+							onClick={() => {
+								handleClickView("table");
+							}}>
+							<FontAwesomeIcon icon={faBars} size={"lg"} color={"white"} className={"pointer"} />
+						</div>
+						<div
+							className={viewType === "card" ? style.selected : ""}
+							onClick={() => {
+								handleClickView("card");
+							}}>
+							<FontAwesomeIcon
+								icon={faTableCellsLarge}
+								size={"lg"}
+								color={"white"}
+								className={"pointer"}
+							/>
+						</div>
 					</div>
 				</div>
 				{viewType === "table" && (
@@ -136,7 +138,7 @@ export default function Ladder() {
 											onClick={() => {
 												handleClickHeader(header);
 											}}
-											className={header.dir != undefined ? "pointer" : ""}>
+											className={header.dir !== undefined ? "pointer" : ""}>
 											{header.name}
 											{header.dir === "asc" && (
 												<FontAwesomeIcon icon={faArrowUp} className={"ml-5"} />
@@ -152,10 +154,11 @@ export default function Ladder() {
 								{users.map((user, count) => (
 									<tr key={user.userId}>
 										<td scope="row">
-											{user.position == 1 ? (
+											{user.position === 1 ? (
 												<img
 													width={20}
 													height={20}
+													alt={"Crown"}
 													src={require("../../assets/images/crown.png")}
 													className={style.crown}
 												/>
@@ -168,6 +171,7 @@ export default function Ladder() {
 												src={user.avatar}
 												width={20}
 												height={20}
+												alt={"Avatar"}
 												className={"mr-10 border-radius-10"}
 											/>
 											{user.username}

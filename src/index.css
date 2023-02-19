@@ -97,3 +97,6 @@ code {
 .text-center {
 	text-align: center;
 }
+.active {
+	color: #00ff00 !important;
+}

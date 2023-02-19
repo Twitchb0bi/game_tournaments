@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from "reactstrap";
+import { Collapse, Nav, Navbar, NavbarToggler, NavItem } from "reactstrap";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import style from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,7 @@ const Header = ({ navItems }) => {
 	const itemList = navItems.map((item) => {
 		return (
 			<NavItem key={item.url} className={style.navItem}>
-				<RouterLink to={item.url} className="nav-link">
+				<RouterLink to={item.url} className={style.navLink}>
 					{item.text}
 				</RouterLink>
 			</NavItem>
@@ -26,7 +26,7 @@ const Header = ({ navItems }) => {
 	};
 	return (
 		<div className={style.navBar}>
-			<Navbar expand="md" dark>
+			<Navbar expand="md" dark className={style.container_navbar}>
 				<div className="container container_nav">
 					<NavbarToggler onClick={toggle} />
 
@@ -38,13 +38,15 @@ const Header = ({ navItems }) => {
 				</div>
 				<div className={style.username}>
 					<p>{localStorage.getItem("username")}</p>
-					<FontAwesomeIcon
-						className="pointer"
-						icon={faSignOut}
-						color="red"
-						onClick={logout}
-						size={"lg"}
-					/>
+					<div className={style.container_logout}>
+						<FontAwesomeIcon
+							className="pointer"
+							icon={faSignOut}
+							color="red"
+							onClick={logout}
+							size={"lg"}
+						/>
+					</div>
 				</div>
 			</Navbar>
 		</div>

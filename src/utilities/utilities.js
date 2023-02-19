@@ -16,7 +16,7 @@ export const getInformazioniGioco = async () => {
 			"X-RapidAPI-Host": "omgvamp-hearthstone-v1.p.rapidapi.com",
 		},
 	});
-	if (response.status == 200) {
+	if (response.status === 200) {
 		const json = await response.json();
 		informazioniGioco = json;
 	} else {
@@ -25,6 +25,6 @@ export const getInformazioniGioco = async () => {
 //Funzione che ottiene le informazioni del gioco in base alla tipologia richiesta dal json ottenuto
 //Se tipo è null allora ritorna tutto il json, altrimenti ritorna solo la tipologia richiesta
 export const getInformazioneGiocoSpecifica = (tipo = null) => {
-	if (tipo == null) return informazioniGioco;
+	if (tipo === null) return informazioniGioco;
 	return informazioniGioco[tipo];
 };

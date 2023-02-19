@@ -3,9 +3,9 @@ import style from "./CardUser.module.css";
 export default function CardUser({ avatar, position, userId, username, earnings, win, lose }) {
 	return (
 		<div className={style.card} key={userId}>
-			{position != 1 && <p className={style.card_header_rank}>{position}</p>}
+			{position !== 1 && <p className={style.card_header_rank}>{position}</p>}
 			<div className={style.container_img_card}>
-				{position == 1 && (
+				{position === 1 && (
 					<img
 						width={50}
 						height={50}
