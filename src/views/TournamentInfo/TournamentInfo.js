@@ -18,18 +18,19 @@ import { Button } from "reactstrap";
 
 export default function TournamentInfo() {
 	const [tournamentStarted, setTournamentStarted] = useState(false);
-	const [tournamentInfo, setTournamentInfo] = useState({
-		...useLocation().state,
-		// starting: new Date(),
-	});
+	const [tournamentInfo, setTournamentInfo] = useState(useLocation().state);
 	const [bracket, setBracket] = useState([]);
 	const [enrolled, setEnrolled] = useState(false);
 	const [currentMatch, setCurrentMatch] = useState();
+	const [noMatch, setNoMatch] = useState(false);
 	const team = useRef();
 
 	useEffect(() => {
+		//Controllo se ho un team salvato nel local storage
+		//Se ho un team salvato vuol dire che sono iscritto al torneo
 		team.current = JSON.parse(localStorage.getItem(tournamentInfo.tournamentId));
 		if (team.current) setEnrolled(true);
+
 		//se premo il tasto f parte il torneo (solo per testare e per non aspettare il countdown)
 		document.onkeydown = (e) => {
 			if (e.key === "f") {
@@ -37,15 +38,18 @@ export default function TournamentInfo() {
 			}
 		};
 	}, []);
+
 	//Fuzione che modifica la data di inizio del torneo all'ora attuale
 	const startTournament = () => {
 		setTournamentInfo({ ...tournamentInfo, starting: new Date() });
 	};
+
 	//Funzione che gestisce la fine del countdown
 	const handleCountdownEnd = () => {
 		setTournamentStarted(true);
 		createBracket();
 	};
+
 	//Funzione che crea il bracket del torneo usando dei dati falsi
 	const createBracket = () => {
 		let bracket = [];
@@ -55,6 +59,10 @@ export default function TournamentInfo() {
 			2,
 			Math.ceil(Math.log(tournamentInfo.enrolled) / Math.log(2))
 		);
+		if (massimoNumeroPartecipanti === 0) {
+			setNoMatch(true);
+			return;
+		}
 		var rounds = Math.log(massimoNumeroPartecipanti) / Math.log(2);
 
 		//Se il team è iscritto lo aggiungo al bracket
@@ -116,11 +124,12 @@ export default function TournamentInfo() {
 						partecipanti[0].resultText = "Won";
 					}
 					let nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.floor(j / 4 + 1));
+					if (i === rounds) nextMatchId = null;
 					let obj = {
 						id: "Round " + 1 + " Match " + Number(Math.ceil(j / 2) + 1),
 						nextMatchId: nextMatchId,
 						tournamentRoundText: i.toString(),
-						startTime: new Date().toLocaleDateString(),
+						// startTime: new Date().toLocaleDateString(),
 						state: status,
 						participants: partecipanti,
 					};
@@ -179,18 +188,18 @@ export default function TournamentInfo() {
 						id: "Round " + i + " Match " + j,
 						nextMatchId: nextMatchId,
 						tournamentRoundText: i.toString(),
-						startTime: new Date().toLocaleDateString(),
+						// startTime: new Date().toLocaleDateString(),
 						state: status,
 						participants: partecipanti,
 					});
 				}
 			}
 		}
-		//console.log(bracket);
-		//Imposto il match corrente come il match finale
+		//Imposto l`ultimo match come match da visualizzare
 		setCurrentMatch(bracket[bracket.length - 1]);
 		setBracket(bracket);
 	};
+
 	//Funzione che calcola l`offset da cui partire per prendere i partecipanti
 	const calcolaOffset = (rounds, i) => {
 		let offset = Math.pow(2, rounds - i + 2);
@@ -352,7 +361,10 @@ export default function TournamentInfo() {
 								<h3 className={"text-white " + style.status_match}>
 									{currentMatch.state.replace(/_/g, " ")}
 								</h3>
-								<h1 className={"text-white text-center " + style.match_result}>2 : 1</h1>
+								<h1 className={"text-white text-center " + style.match_result}>
+									{currentMatch.participants[0].isWinner ? "1 " : "0 "} :{" "}
+									{currentMatch.participants[1].isWinner ? " 1" : " 0"}
+								</h1>
 							</div>
 							<div className={style.container_partecipante}>
 								<img
@@ -375,6 +387,11 @@ export default function TournamentInfo() {
 							<TournamentBracket matches={bracket} />
 						</div>
 					</>
+				)}
+				{noMatch && (
+					<div className={style.container_no_match}>
+						<h2 className="text-white">Tournament started without Teams</h2>
+					</div>
 				)}
 			</div>
 		</div>

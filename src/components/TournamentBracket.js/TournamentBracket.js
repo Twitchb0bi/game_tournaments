@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-	SingleEliminationBracket,
-	DoubleEliminationBracket,
-	Match,
-	SVGViewer,
-} from "@g-loot/react-tournament-brackets";
+import React, { useEffect } from "react";
+import { SingleEliminationBracket, Match } from "@g-loot/react-tournament-brackets";
 import style from "./TournamentBracket.module.css";
 export default function TournamentBracket({ matches }) {
 	const [screenDimension, setScreenDimension] = React.useState({

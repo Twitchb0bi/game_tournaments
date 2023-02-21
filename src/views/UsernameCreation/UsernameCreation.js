@@ -19,7 +19,7 @@ export default function UsernameCreation() {
 	}, []);
 	return (
 		<div className={style.container_username_creation}>
-			<h1 className="text-white big-title">Welcome!</h1>
+			<h1 className="text-white big-title">Welcome</h1>
 			<h5 className="text-white big-sub-title">Ready to start competing?</h5>
 			<div className={style.container_form_username_creation}>
 				{/* <div> */}

@@ -1,7 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import CustomTooltip from "../Tooltip/CustomTooltip";
-
 import style from "./CardGame.module.css";
 export default function CardGame({ img, title, id, background }) {
 	const navigate = useNavigate();

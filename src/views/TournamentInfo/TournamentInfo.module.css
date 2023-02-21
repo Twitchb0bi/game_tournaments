@@ -296,3 +296,11 @@ h4 {
 		letter-spacing: unset;
 	}
 }
+
+.container_no_match {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 20px;
+}

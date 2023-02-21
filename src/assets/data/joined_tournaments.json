@@ -1,0 +1,21 @@
+{
+	"tournaments": [
+		{
+			"tournamentId": "9a4729af-146f-42b6-bd85-66d70693fb4b",
+			"entryFee": 30,
+			"teamSize": 1,
+			"totalEarnings": 38,
+			"firstEarnings": "19",
+			"secondEarnings": "11",
+			"thirdEarnings": "8",
+			"tournamentTitle": "Half-Life - 1V1",
+			"starting": "2023-02-22T00:21:08.492Z",
+			"enrolled": 50,
+			"maxTeams": 60,
+			"img": "https://media.rawg.io/media/games/6c5/6c55e22185876626881b76c11922b073.jpg",
+			"title": "Half-Life",
+			"id": "18080",
+			"background": "https://media.rawg.io/media/screenshots/345/3458269ae8ea44a6b8c8268d39fe36a1.jpg"
+		}
+	]
+}

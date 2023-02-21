@@ -3,7 +3,7 @@ import style from "./CreateTeam.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
-import { faPeopleGroup, faPeopleRobbery } from "@fortawesome/free-solid-svg-icons";
+import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 export default function CreateTeam() {
 	const location = useLocation();
 	const [tournamentInfo, setTournamentInfo] = useState(location.state.info);

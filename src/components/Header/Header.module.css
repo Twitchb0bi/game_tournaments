@@ -62,3 +62,23 @@
 		align-items: center;
 	}
 }
+.container_card_joined_tournament {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 20px;
+	background: #111c2c;
+	border-radius: 10px;
+	width: 100%;
+}
+.img_card {
+	width: 120px;
+	height: 150px;
+	border-radius: 15px;
+	object-fit: cover;
+	position: relative;
+}
+.container_card_joined_tournament p {
+	margin: 0;
+}

@@ -56,6 +56,7 @@ export default function Ladder() {
 		return obj;
 	}
 
+	//All`apertura della pagina creo 30 utenti random
 	useEffect(() => {
 		let arr = [];
 		for (let i = 0; i < 30; i++) {
