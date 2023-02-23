@@ -7,7 +7,7 @@ import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 export default function CreateTeam() {
 	const location = useLocation();
 	const [tournamentInfo, setTournamentInfo] = useState(location.state.info);
-	const usernameList = useRef({});
+	const usernameList = useRef({ 0: localStorage.getItem("username") });
 	const [disabled, setDisabled] = useState(true);
 	const [inputFields, setInputFields] = useState([]);
 	const navigate = useNavigate();
@@ -46,7 +46,6 @@ export default function CreateTeam() {
 		usernameList.current[index] = value;
 		validateInput();
 	};
-
 	//Funzione che controlla se abbiamo inserito tutti i valori degli username
 	//Se non abbiamo inserito tutti gli username, il bottone per creare il team rimane disabilitato
 	const validateInput = () => {

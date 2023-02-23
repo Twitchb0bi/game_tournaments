@@ -14,7 +14,7 @@ let count = 1;
 export default function Ladder() {
 	const [headerTabella, setHeaderTabella] = useState([
 		{ name: "Rank" },
-		{ name: "Name" },
+		{ name: "Name", title: "username", dir: "" },
 		{ name: "Earnings", title: "earnings", dir: "" },
 		{ name: "Stats", title: "win", dir: "" },
 	]);

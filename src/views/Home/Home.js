@@ -25,6 +25,7 @@ let arr = [
 export default function Home() {
 	const [allGames, setAllGames] = useState([]);
 	const [loading, setLoading] = useState(true);
+
 	//Funzione che ottiene i nomi dei gioci dal server
 	const getGames = async (text = "", page = 1) => {
 		let response = await fetch(
@@ -43,6 +44,8 @@ export default function Home() {
 			setLoading(false);
 		}
 	};
+
+	//Ottengo i giochi al caricamento della pagina
 	useEffect(() => {
 		getGames();
 	}, []);
@@ -52,6 +55,7 @@ export default function Home() {
 		window.clearTimeout(debounceTimer);
 		debounceTimer = window.setTimeout(callback, 250);
 	}, []);
+
 	return (
 		<div className={style.container_home}>
 			<div className={style.container_header_home}>

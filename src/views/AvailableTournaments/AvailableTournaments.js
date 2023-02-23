@@ -49,7 +49,7 @@ export default function AvailableTournaments() {
 		let arr = [];
 		//Creo un array di tornei random (da 1 a 10)
 		for (let i = 0; i < Math.floor(Math.random() * 10) + 1; i++) {
-			arr.push(createRandomTournaments());
+			arr.push(createRandomTournament());
 		}
 		//ordino per data di inizio
 		arr.sort((a, b) => {
@@ -59,7 +59,7 @@ export default function AvailableTournaments() {
 	}, []);
 
 	//Funzione che crea un torneo random
-	const createRandomTournaments = () => {
+	const createRandomTournament = () => {
 		let enrolled = faker.datatype.number({ min: 0, max: 50 });
 		let maxTeams = faker.datatype.number({
 			min: enrolled,
@@ -72,9 +72,9 @@ export default function AvailableTournaments() {
 			entryFee: faker.datatype.number({ min: 0, max: 100 }),
 			teamSize: teamSize,
 			totalEarnings: totalEarnings,
-			firstEarnings: (totalEarnings * 0.5).toFixed(0),
-			secondEarnings: (totalEarnings * 0.3).toFixed(0),
-			thirdEarnings: (totalEarnings * 0.2).toFixed(0),
+			firstEarnings: (totalEarnings * 0.5).toFixed(2),
+			secondEarnings: (totalEarnings * 0.3).toFixed(2),
+			thirdEarnings: (totalEarnings * 0.2).toFixed(2),
 
 			tournamentTitle: infoGioco.title + " - " + teamSize + "V" + teamSize,
 			starting: faker.date.soon(3),

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-	Button,
 	Collapse,
 	Nav,
 	Navbar,
@@ -83,7 +82,7 @@ const Header = ({ navItems }) => {
 					<p>{localStorage.getItem("username")}</p>
 					<div className={style.container_logout}>
 						<FontAwesomeIcon
-							className="pointer"
+							className={style.exit + " pointer"}
 							icon={faSignOut}
 							color="red"
 							onClick={logout}

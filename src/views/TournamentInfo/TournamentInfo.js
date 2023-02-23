@@ -285,7 +285,9 @@ export default function TournamentInfo() {
 								<FontAwesomeIcon icon={faUsers} color={"white"} size={"lg"} />
 								<p>
 									<strong>Enrolled:</strong>{" "}
-									{tournamentInfo.enrolled + "/" + tournamentInfo.maxTeams}
+									{enrolled
+										? Number(tournamentInfo.enrolled + 1)
+										: tournamentInfo.enrolled + "/" + tournamentInfo.maxTeams}
 								</p>
 							</div>
 							<div className={style.container_card_info}>

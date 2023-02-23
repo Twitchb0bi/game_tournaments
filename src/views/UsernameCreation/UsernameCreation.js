@@ -10,10 +10,13 @@ AOS.init();
 export default function UsernameCreation() {
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
+
+	//Funzione che salva l'username nel local storage e reindirizza alla home
 	const confermaUsername = () => {
 		localStorage.setItem("username", username);
 		navigate("/");
 	};
+	//Controllo se l'username è già stato inserito, in tal caso reindirizzo alla home
 	useEffect(() => {
 		localStorage.getItem("username") && navigate("/");
 	}, []);
@@ -22,14 +25,12 @@ export default function UsernameCreation() {
 			<h1 className="text-white big-title">Welcome</h1>
 			<h5 className="text-white big-sub-title">Ready to start competing?</h5>
 			<div className={style.container_form_username_creation}>
-				{/* <div> */}
 				<Input
 					placeholder="Enter your username"
 					onChange={(e) => {
 						setUsername(e.target.value);
 					}}
 				/>
-				{/* </div> */}
 				<Button
 					color="success"
 					size="lg"

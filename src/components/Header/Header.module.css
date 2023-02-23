@@ -8,7 +8,6 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	padding: 5px;
 }
 .container_navbar {
 	width: max(80vw, 300px);
@@ -81,4 +80,13 @@
 }
 .container_card_joined_tournament p {
 	margin: 0;
+}
+.exit:hover {
+	background-color: red;
+	color: white;
+	border-radius: 5px;
+	padding: 5px;
+}
+.exit {
+	padding: 5px;
 }
