@@ -54,16 +54,22 @@ export default function TournamentInfo() {
 	const createBracket = () => {
 		let bracket = [];
 		let partecipant = [];
+
 		//Per creare il bracket devo avere un numero di partecipanti che sia una potenza di 2
 		let massimoNumeroPartecipanti = Math.pow(
 			2,
 			Math.ceil(Math.log(tournamentInfo.enrolled) / Math.log(2))
 		);
+
 		if (massimoNumeroPartecipanti === 0) {
 			setNoMatch(true);
 			return;
 		}
+
+		//Calcolo il numero di round del torneo
 		var rounds = Math.log(massimoNumeroPartecipanti) / Math.log(2);
+
+		// Il numero dei match è sempre il numero dei team iscritti meno uno
 
 		//Se il team è iscritto lo aggiungo al bracket
 		if (team.current) {
@@ -75,6 +81,7 @@ export default function TournamentInfo() {
 				img: faker.image.avatar(),
 			});
 		}
+
 		//Creo i finti partecipanti
 		for (let i = 0; i < massimoNumeroPartecipanti; i++) {
 			if (i < tournamentInfo.enrolled) {
@@ -86,22 +93,25 @@ export default function TournamentInfo() {
 				};
 				partecipant.push(obj);
 			} else {
+				// se non ho abbastanza partecipanti creo dei partecipanti con nome TBD che non partecipanno al torneo, servono solo per gestire i bracket
 				partecipant.push({
 					id: faker.datatype.uuid(),
 					name: "TBD",
 				});
 			}
 		}
-		//console.log(partecipant)
+
 		for (let i = 1; i < rounds + 1; i++) {
+			//Se è il primo round
 			if (i === 1)
 				for (let j = 0; j < partecipant.length; j += 2) {
+					//Itero i partecipanti a due a due per creare i match
 					let status = "SCORE_DONE";
-					let randomNumber = Math.random();
+					let randomNumber = Math.random(); // Genero un numero random
 					let partecipanti = [];
 					let obj1 = {
 						id: partecipant[j]?.id || null,
-						resultText: randomNumber > 0.5 ? "Won" : "Lost",
+						resultText: randomNumber > 0.5 ? "Won" : "Lost", //Se il numero è maggiore di 0.5 il primo partecipante ha vinto altrimenti ha perso
 						isWinner: randomNumber > 0.5 ? true : false,
 						status: "PLAYED",
 						name: partecipant[j]?.name || "TBD",
@@ -115,6 +125,7 @@ export default function TournamentInfo() {
 						name: partecipant[j + 1]?.name || "TBD",
 						img: partecipant[j + 1]?.img || null,
 					};
+					//Se il nome del partecipante è TBD vuol dire che è un WALK_OVER
 					if (obj1.name !== "TBD") partecipanti.push(obj1);
 					if (obj2.name !== "TBD") partecipanti.push(obj2);
 
@@ -123,12 +134,15 @@ export default function TournamentInfo() {
 						partecipanti[0].isWinner = true;
 						partecipanti[0].resultText = "Won";
 					}
+					//Creo l'id del prossimo match che sarà il round successivo (Round 2) e il match successivo Sarà il match attuale /4 + 1
+					// +1 perchè i match partono da 1 e non da 0
 					let nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.floor(j / 4 + 1));
+					//se è presente un solo round allora non ho un match successivo
 					if (i === rounds) nextMatchId = null;
 					let obj = {
 						id: "Round " + 1 + " Match " + Number(Math.ceil(j / 2) + 1),
 						nextMatchId: nextMatchId,
-						tournamentRoundText: i.toString(),
+						torunamentRoundText: i.toString(),
 						// startTime: new Date().toLocaleDateString(),
 						state: status,
 						participants: partecipanti,
@@ -136,24 +150,30 @@ export default function TournamentInfo() {
 					bracket.push(obj);
 				}
 			else {
-				//Creo gli altri match
+				//Creo i match successivi al primo
 				for (let j = 1; j <= Math.pow(2, rounds - i); j++) {
 					let nextMatchId = null;
 
 					// // Se è l`ultimo round allora non ha un match successivo   (e` la finale)
 					if (i === rounds) nextMatchId = null;
 					else nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.ceil(j / 2));
-					//ottengo i partecipanti che hanno vinto il match precedente
-					// 2 * (i - 1)
+
 					let partecipanti = [];
+
+					//Offset serve a capire da dove devo partire a prendere i team che hanno vinto il match precedente
 					let offset = 0;
 					if (i > 2) offset = calcolaOffset(rounds, i);
 					const startIndex = offset + 2 * (j - 1);
+
+					//prendo i match precedenti
 					let match1 = bracket[startIndex];
 					let match2 = bracket[startIndex + 1];
 					let randomNumber = Math.random();
 					let partecipant1 = null;
 					let partecipant2 = null;
+
+					//Trovo chi ha vinto il primo match precedente
+					//E lo aggiorno con il risultato del nuovo match
 					for (let k = 0; k < match1.participants.length; k++) {
 						if (match1.participants[k].isWinner) {
 							partecipant1 = {
@@ -164,6 +184,9 @@ export default function TournamentInfo() {
 							};
 						}
 					}
+
+					//Trovo chi ha vinto il secondo match precedente
+					//E lo aggiorno con il risultato del nuovo match
 					for (let k = 0; k < match2.participants.length; k++) {
 						if (match2.participants[k].isWinner) {
 							partecipant2 = {
@@ -178,6 +201,7 @@ export default function TournamentInfo() {
 					if (partecipant2) partecipanti.push(partecipant2);
 
 					let status = "SCORE_DONE";
+					//Se è presente un solo partecipante vuol dire che è un WALK_OVER
 					if (partecipanti.length === 1) {
 						status = "WALK_OVER";
 						partecipanti[0].isWinner = true;
@@ -197,6 +221,7 @@ export default function TournamentInfo() {
 		}
 		//Imposto l`ultimo match come match da visualizzare
 		setCurrentMatch(bracket[bracket.length - 1]);
+		//Imposto il bracket
 		setBracket(bracket);
 	};
 

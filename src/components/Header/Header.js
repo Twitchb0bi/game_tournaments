@@ -1,26 +1,17 @@
 import React, { useState } from "react";
-import {
-	Collapse,
-	Nav,
-	Navbar,
-	NavbarToggler,
-	NavItem,
-	PopoverBody,
-	PopoverHeader,
-	UncontrolledPopover,
-} from "reactstrap";
+import { Collapse, Nav, Navbar, NavbarToggler, NavItem } from "reactstrap";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import style from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faRightToBracket, faSignOut } from "@fortawesome/free-solid-svg-icons";
-import joined_tournaments from "../../assets/data/joined_tournaments.json";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+// import joined_tournaments from "../../assets/data/joined_tournaments.json";
 
 const Header = ({ navItems }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
 	const toggle = () => setIsOpen(!isOpen);
-	const [popoverOpen, setPopoverOpen] = useState(false);
-	const togglePopover = () => setPopoverOpen(!popoverOpen);
+	// const [popoverOpen, setPopoverOpen] = useState(false);
+	// const togglePopover = () => setPopoverOpen(!popoverOpen);
 
 	const itemList = navItems.map((item) => {
 		return (
@@ -49,10 +40,10 @@ const Header = ({ navItems }) => {
 					</Collapse>
 				</div>
 				<div className={style.username}>
-					<div id={"Popover1"} onClick={togglePopover}>
+					{/* <div id={"Popover1"} onClick={togglePopover}>
 						<FontAwesomeIcon icon={faBell} color={"white"} className={"pointer"} />
-					</div>
-					<UncontrolledPopover
+					</div> */}
+					{/* <UncontrolledPopover
 						isOpen={popoverOpen}
 						style={{ width: "300px" }}
 						flip
@@ -78,7 +69,7 @@ const Header = ({ navItems }) => {
 								</div>
 							))}
 						</PopoverBody>
-					</UncontrolledPopover>
+					</UncontrolledPopover> */}
 					<p>{localStorage.getItem("username")}</p>
 					<div className={style.container_logout}>
 						<FontAwesomeIcon
