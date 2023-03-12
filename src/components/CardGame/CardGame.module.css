@@ -8,7 +8,7 @@
 	height: fit-content;
 }
 .img_card {
-	width: 250px;
+	width: 150px;
 	height: 200px;
 	border-radius: 15px;
 	object-fit: cover;
@@ -19,7 +19,7 @@
 	color: #ffffff;
 } */
 
-.container_card:hover {
+.test .container_card:hover {
 	top: -10px;
 }
 .container_card_title {
@@ -27,11 +27,13 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	width: 250px;
+	width: 150px;
+	position: relative;
 }
 .text_overflow {
-	width: 250px;
+	width: 150px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 1.3rem;
 }

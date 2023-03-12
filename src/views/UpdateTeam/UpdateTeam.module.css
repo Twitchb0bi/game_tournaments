@@ -1,0 +1,131 @@
+.container_pagina {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.container_pagina_update_team {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 80%;
+	height: 100%;
+	padding: 10px;
+}
+.img_copertina {
+	object-fit: scale-down;
+	height: 30vh;
+	width: 100%;
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+.container_copertina {
+	height: 30vh;
+	position: relative;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+}
+.container_edit_copertina {
+	display: none;
+}
+.container_copertina:hover .container_edit_copertina {
+	display: flex;
+	position: absolute;
+	top: 50%;
+	bottom: 50%;
+	left: 50%;
+}
+
+.container_team_name {
+	margin-top: 20px;
+	width: 100%;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.container_team_components {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	width: 100%;
+	gap: 10px;
+	flex-wrap: wrap;
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid lightgray;
+}
+.container_row_component {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	flex: 0.3;
+	width: 100%;
+	background-color: #111c2c;
+	border-radius: 10px;
+	padding: 10px;
+	min-width: 300px;
+	max-width: 360px;
+	height: 55px;
+	gap: 10px;
+}
+
+@media screen and (max-width: 840px) {
+	.container_row_component {
+		width: 100%;
+		flex: 1;
+	}
+	.container_pagina_update_team {
+		width: 90%;
+		padding: 0px;
+	}
+}
+@media screen and (max-width: 370px) {
+	.container_pagina_update_team {
+		width: 100%;
+		padding: 10px;
+	}
+}
+@media screen and (max-width: 350px) {
+	.container_row_component {
+		width: 100%;
+		flex: 1;
+		min-width: unset;
+	}
+}
+
+h4 {
+	font-size: 1.2rem;
+}
+
+.container_components {
+	width: 100%;
+}
+.container_components_title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.modal h5 {
+	color: black;
+}
+.button_kick {
+	width: 60px;
+}
+
+.container_input_modifica {
+	margin-bottom: 10px;
+	width: max(300px, 30%) !important;
+	background-color: #111c2c;
+	color: white;
+	font-size: 1rem;
+}

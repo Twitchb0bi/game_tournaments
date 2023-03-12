@@ -5,6 +5,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Table } from "reactstrap";
 import { faker } from "@faker-js/faker";
 import style from "./AvailableTournaments.module.css";
+import {
+	getToken,
+	handleResponse,
+	ottieniFormatoDataCorretto,
+	URL_BASE,
+} from "../../utilities/utilities";
 
 export default function AvailableTournaments() {
 	const location = useLocation();
@@ -40,47 +46,35 @@ export default function AvailableTournaments() {
 
 	//Funzione che gestisce il click sul bottone "View" di un torneo
 	const handleClickView = (tournamentInfo) => {
-		navigate(`/tournament/${tournamentInfo.tournamentId}`, {
+		navigate(`/tournament/${tournamentInfo._id}`, {
 			state: { ...tournamentInfo, ...infoGioco },
 		});
 	};
 
 	useEffect(() => {
-		let arr = [];
-		//Creo un array di tornei random (da 1 a 10)
-		for (let i = 0; i < Math.floor(Math.random() * 10) + 1; i++) {
-			arr.push(createRandomTournament());
-		}
-		//ordino per data di inizio
-		arr.sort((a, b) => {
-			return a.starting - b.starting;
-		});
-		setTournament(arr);
+		getTournaments();
 	}, []);
 
-	//Funzione che crea un torneo random
-	const createRandomTournament = () => {
-		let enrolled = faker.datatype.number({ min: 0, max: 50 });
-		let maxTeams = faker.datatype.number({
-			min: enrolled,
-			max: enrolled + faker.datatype.number({ min: 1, max: 50 }),
+	//Funzione che ottiene tutti i tornei disponibili per un gioco
+	const getTournaments = async () => {
+		const url = URL_BASE + "/tournament";
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + getToken(),
+			},
+			body: JSON.stringify({
+				game: infoGioco.id,
+			}),
 		});
-		const teamSize = faker.datatype.number({ min: 1, max: 2 });
-		const totalEarnings = faker.datatype.number({ min: 1, max: 100 });
-		return {
-			tournamentId: faker.datatype.uuid(),
-			entryFee: faker.datatype.number({ min: 0, max: 100 }),
-			teamSize: teamSize,
-			totalEarnings: totalEarnings,
-			firstEarnings: (totalEarnings * 0.5).toFixed(2),
-			secondEarnings: (totalEarnings * 0.3).toFixed(2),
-			thirdEarnings: (totalEarnings * 0.2).toFixed(2),
-
-			tournamentTitle: infoGioco.title + " - " + teamSize + "V" + teamSize,
-			starting: faker.date.soon(3),
-			enrolled: enrolled,
-			maxTeams: maxTeams,
-		};
+		handleResponse(response, navigate);
+		if (response.status === 200) {
+			const data = await response.json();
+			setTournament(data);
+		} else {
+			const data = await response.json();
+		}
 	};
 
 	//Funzione che ordina la tabella in base all`header cliccato
@@ -142,10 +136,12 @@ export default function AvailableTournaments() {
 						<tbody>
 							{tournament.map((tournament) => (
 								<tr key={tournament.id}>
-									<td scope="row">€ {tournament.entryFee}</td>
+									<td scope="row">
+										{tournament.entryFee == 0 ? "Free" : "€" + tournament.entryFee}
+									</td>
 									<td>{tournament.teamSize}</td>
-									<td>{tournament.tournamentTitle}</td>
-									<td>{tournament.starting.toLocaleString()}</td>
+									<td>{tournament.name}</td>
+									<td>{ottieniFormatoDataCorretto(tournament.startingDate)}</td>
 									<td>{tournament.enrolled + "/" + tournament.maxTeams}</td>
 									<td>
 										<Button
@@ -160,6 +156,7 @@ export default function AvailableTournaments() {
 							))}
 						</tbody>
 					</Table>
+					{tournament.length == 0 && <div className="no_item_table">No Tournamets available</div>}
 				</div>
 			</div>
 		</div>

@@ -1,9 +1,9 @@
 import React from "react";
 import { Spinner } from "reactstrap";
 import style from "./Loading.module.css";
-function Loading() {
+function Loading({ allPage = false }) {
 	return (
-		<div>
+		<div className={allPage ? style.allPage : ""}>
 			<Spinner className={style.spinner_lg} color="primary">
 				loading...
 			</Spinner>

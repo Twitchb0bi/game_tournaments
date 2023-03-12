@@ -1,0 +1,250 @@
+.container_match_info_page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	padding-top: 30px;
+}
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: max(80vw, 300px);
+	gap: 30px;
+}
+
+.container_match_info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 300px;
+	background-color: #111c2c;
+	margin-top: 20px;
+	border-radius: 10px;
+}
+.container_info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background-color: #111c2c;
+	position: relative;
+	border-radius: 10px;
+	color: white;
+	max-height: 100px;
+	padding-right: 20px;
+}
+.container_img_titolo {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.img_card {
+	width: 120px;
+	height: 150px;
+	border-radius: 15px;
+	object-fit: cover;
+	position: relative;
+}
+.container_team {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	flex-wrap: wrap;
+	row-gap: 10px;
+	gap: 10px;
+}
+.container_team_info {
+	flex: 0.45;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	background-color: #111c2c;
+	width: 100%;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.container_match_operation {
+	width: 100%;
+	height: 70px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #111c2c;
+	border-radius: 10px;
+	padding: 10px;
+	gap: 10px;
+}
+
+.container_player {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background-color: #1b2f4d;
+	border-radius: 10px;
+	padding: 5px;
+	border: 1px solid lightgray;
+}
+.container_team_components {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	gap: 10px;
+	margin-top: 10px;
+}
+.container_header_team {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.winner {
+	color: white;
+	background-color: green;
+}
+.loser {
+	color: white;
+	background-color: red;
+}
+
+.container_name_result {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.container_name_result h3 {
+	margin: 0;
+}
+
+.container_team_user {
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	width: 30vw;
+	height: 30vh;
+	position: relative;
+	min-width: 200px;
+	min-height: 200px;
+}
+
+.img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 10px;
+}
+.container_team_name h5 {
+	margin: 0;
+}
+.container_team_name {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	background-color: #111c2c;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.container_score {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: #111c2c;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.container_info_team {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-between;
+	width: 100%;
+	gap: 5px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-color: #111c2c;
+	border-radius: 10px;
+	padding: 10px;
+}
+.container_score_team {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.row_user {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	gap: 10px;
+}
+
+.in_game_username {
+	color: white;
+	margin-bottom: 0;
+	font-size: 1rem;
+}
+
+.container_icon_game {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	border-radius: 10px;
+}
+
+@media screen and (max-width: 510px) {
+	.container_team {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+}
+.container_vs h1 {
+	margin: 0;
+	font-size: 3rem;
+}
+@media screen and (max-width: 610px) {
+	.container {
+		width: 95vw;
+		gap: 30px;
+	}
+}
+
+.header_black h5 {
+	color: black;
+}

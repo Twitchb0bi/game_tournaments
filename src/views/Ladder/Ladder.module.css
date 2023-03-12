@@ -31,7 +31,7 @@
 	gap: 10px;
 }
 .selected {
-	background-color: #bbd6f90d;
+	background-color: #bbd6f90d !important;
 	border-radius: 5px;
 	padding: 2px 10px;
 }
@@ -55,4 +55,22 @@
 	justify-content: space-between;
 	width: 100%;
 	margin-top: 40px;
+}
+
+.container_type_ladder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	gap: 10px;
+}
+
+.container_type_ladder h4 {
+	border-radius: 10px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.container_type_ladder h4:hover {
+	background-color: #bbd6f90d;
 }

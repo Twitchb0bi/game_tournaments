@@ -1,3 +1,5 @@
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import style from "./CardUser.module.css";
 export default function CardUser({ avatar, position, userId, username, earnings, win, lose }) {
@@ -13,7 +15,11 @@ export default function CardUser({ avatar, position, userId, username, earnings,
 						className={style.crown}
 					/>
 				)}
-				<img src={avatar} width={64} height={64} className={"border-radius-10"} />
+				{avatar ? (
+					<img src={avatar} width={64} height={64} className={"border-radius-10"} />
+				) : (
+					<FontAwesomeIcon icon={faUserCircle} size={"4x"} color={"white"} />
+				)}
 			</div>
 			<p className={style.username}>{username}</p>
 			<p className="text-white">€ {earnings}</p>

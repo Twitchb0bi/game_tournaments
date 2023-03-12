@@ -1,17 +1,29 @@
-import React, { useState } from "react";
-import { Collapse, Nav, Navbar, NavbarToggler, NavItem } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import {
+	Collapse,
+	Nav,
+	Navbar,
+	NavbarToggler,
+	NavItem,
+	UncontrolledPopover,
+	PopoverHeader,
+	PopoverBody,
+} from "reactstrap";
 import { NavLink as RouterLink, useNavigate } from "react-router-dom";
 import style from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faBell, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import Cookies from "js-cookie";
 // import joined_tournaments from "../../assets/data/joined_tournaments.json";
-
+import { handleResponse, URL_BASE } from "../../utilities/utilities";
 const Header = ({ navItems }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
 	const toggle = () => setIsOpen(!isOpen);
-	// const [popoverOpen, setPopoverOpen] = useState(false);
-	// const togglePopover = () => setPopoverOpen(!popoverOpen);
+	const [popoverOpen, setPopoverOpen] = useState(false);
+	const [match, setMatch] = useState([]);
+
+	const togglePopover = () => setPopoverOpen(!popoverOpen);
 
 	const itemList = navItems.map((item) => {
 		return (
@@ -22,10 +34,45 @@ const Header = ({ navItems }) => {
 			</NavItem>
 		);
 	});
+
+	useEffect(() => {
+		ottieniMatch();
+		setInterval(() => {
+			if (Cookies.get("token")) ottieniMatch();
+		}, 300000);
+	}, []);
+
 	//Funzione che effettua il logout
 	const logout = () => {
-		localStorage.clear();
-		navigate("/create");
+		Cookies.remove("token");
+		Cookies.remove("email");
+		Cookies.remove("id");
+		Cookies.remove("username");
+
+		navigate("/login");
+	};
+
+	//Funzione che controlla se ci sono match
+	const ottieniMatch = async () => {
+		const url = URL_BASE + "/match/next";
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + Cookies.get("token"),
+			},
+		});
+		handleResponse(response, navigate);
+		if (response.status === 200) {
+			const data = await response.json();
+			setMatch(data);
+		} else {
+			setMatch([]);
+		}
+	};
+
+	//Funzione che gestisce il click sul match
+	const showMatch = (id) => {
+		navigate("/match/" + id);
 	};
 	return (
 		<div className={style.navBar}>
@@ -40,10 +87,12 @@ const Header = ({ navItems }) => {
 					</Collapse>
 				</div>
 				<div className={style.username}>
-					{/* <div id={"Popover1"} onClick={togglePopover}>
+					<div id={"Popover1"} onClick={togglePopover} className={style.container_icon_badge}>
 						<FontAwesomeIcon icon={faBell} color={"white"} className={"pointer"} />
-					</div> */}
-					{/* <UncontrolledPopover
+
+						{match.length > 0 && <div className={style.container_notification} />}
+					</div>
+					<UncontrolledPopover
 						isOpen={popoverOpen}
 						style={{ width: "300px" }}
 						flip
@@ -51,26 +100,33 @@ const Header = ({ navItems }) => {
 						trigger="legacy"
 						target="Popover1"
 						toggle={togglePopover}>
-						<PopoverHeader>Your Tournaments</PopoverHeader>
+						<PopoverHeader>Your Match</PopoverHeader>
 						<PopoverBody style={{ padding: "0", backgroundColor: "#0e1f34" }}>
-							{joined_tournaments.tournaments.map((tournament) => (
-								<div className={style.container_card_joined_tournament} key={tournament.id}>
-									<div>
-										<h6 className="text-white">{tournament.tournamentTitle}</h6>
-										<p className="text-white">
-											{new Date(tournament.starting).toLocaleDateString()}
-										</p>
+							{match.map((match) => (
+								<div
+									className={style.container_card_joined_tournament}
+									key={match.id}
+									onClick={() => {
+										showMatch(match._id);
+									}}>
+									<div className={style.container_team_name}>
+										<h6 className="text-white">{match.team1.name}</h6>
+										<h5 className="text-white">vs</h5>
+										<h6 className="text-white">{match.team2.name}</h6>
 									</div>
-									<FontAwesomeIcon
-										icon={faRightToBracket}
-										className="text-white pointer"
-										size="2x"
-									/>
+									<p className="text-white">{new Date(match.starting).toLocaleString()}</p>
 								</div>
 							))}
+							{match.length == 0 && (
+								<div className={style.container_no_match}>
+									<h4>No Match Available</h4>
+								</div>
+							)}
 						</PopoverBody>
-					</UncontrolledPopover> */}
-					<p>{localStorage.getItem("username")}</p>
+					</UncontrolledPopover>
+					<RouterLink to={"/profile"} className={style.navLink} state={{ _id: Cookies.get("id") }}>
+						<p>{Cookies.get("username")}</p>
+					</RouterLink>
 					<div className={style.container_logout}>
 						<FontAwesomeIcon
 							className={style.exit + " pointer"}

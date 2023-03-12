@@ -3,6 +3,9 @@ import {
 	faArrowUp,
 	faBars,
 	faTableCellsLarge,
+	faUser,
+	faUserCircle,
+	faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -10,7 +13,9 @@ import { Table } from "reactstrap";
 import { faker } from "@faker-js/faker";
 import style from "./Ladder.module.css";
 import CardUser from "../../components/CardUser/CardUser";
-let count = 1;
+import { getToken, handleResponse, URL_BASE } from "../../utilities/utilities";
+import { useNavigate } from "react-router-dom";
+
 export default function Ladder() {
 	const [headerTabella, setHeaderTabella] = useState([
 		{ name: "Rank" },
@@ -20,6 +25,8 @@ export default function Ladder() {
 	]);
 	const [users, setUsers] = useState([]);
 	const [viewType, setViewType] = useState("table");
+	const [selectedType, setSelectedType] = useState("user");
+	const navigate = useNavigate();
 
 	//Funzione che gestisce il click sull`header della tabella, gestendo la direzione di ordinamento
 	const handleClickHeader = (header) => {
@@ -41,30 +48,30 @@ export default function Ladder() {
 		setHeaderTabella(arr);
 	};
 
-	//Funzione che crea un utente random
-	function createRandomUser() {
-		const obj = {
-			userId: faker.datatype.uuid(),
-			position: count,
-			username: faker.internet.userName(),
-			avatar: faker.image.avatar(),
-			win: faker.datatype.number({ min: 0, max: 100 }),
-			lose: faker.datatype.number({ min: 0, max: 100 }),
-			earnings: faker.datatype.number({ min: 0, max: 10000 }),
-		};
-		count++;
-		return obj;
-	}
-
-	//All`apertura della pagina creo 30 utenti random
+	//Ottengo gli utenti in classifica
 	useEffect(() => {
-		let arr = [];
-		for (let i = 0; i < 30; i++) {
-			arr.push(createRandomUser());
-		}
-		count = 1;
-		setUsers(arr);
+		ottieniClassifica();
 	}, []);
+
+	//Funzione che ottiene la classifica dal server
+	const ottieniClassifica = async () => {
+		const url = URL_BASE + "/user/top";
+		const response = await fetch(url, {
+			method: "GET",
+			headers: {
+				Authorization: "Bearer " + getToken(),
+			},
+		});
+		handleResponse(response, navigate);
+		if (response.status === 200) {
+			const data = await response.json();
+			let arr = data.map((user, count) => {
+				return { ...user, position: count + 1 };
+			});
+			setUsers(arr);
+		} else {
+		}
+	};
 
 	//Funzione che gestisce il click sulle icone per cambiare la vista
 	const handleClickView = (type) => {
@@ -101,11 +108,45 @@ export default function Ladder() {
 		setUsers(arr);
 	};
 
+	const showProfile = (user) => {
+		navigate("/profile", { state: { _id: user._id } });
+	};
+
+	//Funzione che ottiene i team migliori
+	const ottieniTopTeam = async () => {
+		const url = URL_BASE + "/team/top";
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + getToken(),
+			},
+		});
+		handleResponse(response, navigate);
+		if (response.status === 200) {
+			const data = await response.json();
+			let arr = data.map((user, count) => {
+				return { ...user, position: count + 1 };
+			});
+			setUsers(arr);
+		} else {
+		}
+	};
+
+	//Funzione che gestisce il cambio di dati tra user e team
+	const handleClickType = (type) => {
+		setSelectedType(type);
+		if (type === "team") {
+			ottieniTopTeam();
+		} else {
+			ottieniClassifica();
+		}
+	};
 	return (
 		<div className={style.container_ladder}>
 			<div className={style.container_utenti}>
 				<div className={style.container_title_option}>
 					<h1 className="text-white">Rankings</h1>
+
 					<div className={style.container_view_option}>
 						<div
 							className={viewType === "table" ? style.selected : ""}
@@ -127,6 +168,18 @@ export default function Ladder() {
 							/>
 						</div>
 					</div>
+				</div>
+				<div className={style.container_type_ladder}>
+					<h4
+						className={selectedType === "user" ? style.selected : ""}
+						onClick={() => handleClickType("user")}>
+						<FontAwesomeIcon icon={faUser} color={"white"} /> User
+					</h4>
+					<h4
+						className={selectedType === "team" ? style.selected : ""}
+						onClick={() => handleClickType("team")}>
+						<FontAwesomeIcon icon={faUserGroup} color={"white"} /> Team
+					</h4>
 				</div>
 				{viewType === "table" && (
 					<div className={style.container_tabella}>
@@ -165,17 +218,26 @@ export default function Ladder() {
 												/>
 											) : (
 												<>{user.position}</>
-											)}{" "}
+											)}
 										</td>
-										<td>
-											<img
-												src={user.avatar}
-												width={20}
-												height={20}
-												alt={"Avatar"}
-												className={"mr-10 border-radius-10"}
-											/>
-											{user.username}
+										<td
+											className={user.username ? "underline_user pointer" : ""}
+											onClick={() => {
+												if (user.username) showProfile(user);
+											}}>
+											{user.avatar || user.background ? (
+												<img
+													src={user.avatar || user.background}
+													width={20}
+													height={20}
+													alt={"Avatar"}
+													className={"mr-10 border-radius-10"}
+												/>
+											) : (
+												<FontAwesomeIcon icon={faUserCircle} className={"mr-10 "} size={"lg"} />
+											)}
+
+											{user.username || user.name}
 										</td>
 										<td>€ {user.earnings}</td>
 										<td>
@@ -193,10 +255,10 @@ export default function Ladder() {
 						{users.map((user, count) => (
 							<CardUser
 								key={user.userId}
-								avatar={user.avatar}
+								avatar={user.avatar || user.background}
 								userId={user.userId}
 								position={user.position}
-								username={user.username}
+								username={user.username || user.name}
 								win={user.win}
 								lose={user.lose}
 								earnings={user.earnings}

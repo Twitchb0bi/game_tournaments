@@ -13,227 +13,172 @@ import {
 	faUsers,
 	faWallet,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "reactstrap";
+import { getToken, handleResponse, URL_BASE } from "../../utilities/utilities";
+import Cookies from "js-cookie";
 
 export default function TournamentInfo() {
 	const [tournamentStarted, setTournamentStarted] = useState(false);
-	const [tournamentInfo, setTournamentInfo] = useState(useLocation().state);
+	const [tournamentInfo, setTournamentInfo] = useState({});
 	const [bracket, setBracket] = useState([]);
 	const [enrolled, setEnrolled] = useState(false);
 	const [currentMatch, setCurrentMatch] = useState();
 	const [noMatch, setNoMatch] = useState(false);
+	const [joinDisabled, setJoinDisabled] = useState(false);
 	const team = useRef();
+	const location = useLocation();
+	let { id } = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		//Controllo se ho un team salvato nel local storage
-		//Se ho un team salvato vuol dire che sono iscritto al torneo
-		team.current = JSON.parse(localStorage.getItem(tournamentInfo.tournamentId));
-		if (team.current) setEnrolled(true);
-
-		//se premo il tasto f parte il torneo (solo per testare e per non aspettare il countdown)
-		document.onkeydown = (e) => {
-			if (e.key === "f") {
-				startTournament();
-			}
-		};
+		getTournamentInfo(id);
 	}, []);
 
-	//Fuzione che modifica la data di inizio del torneo all'ora attuale
-	const startTournament = () => {
-		setTournamentInfo({ ...tournamentInfo, starting: new Date() });
+	//Ottieni informazioni torneo
+	const getTournamentInfo = async (id) => {
+		const url = URL_BASE + "/tournament/" + id;
+		let response = await fetch(url, {
+			headers: {
+				Authorization: "Bearer " + getToken(),
+			},
+		});
+		handleResponse(response, navigate);
+		if (response.status === 200) {
+			let data = await response.json();
+			if (data.enrolled === data.maxTeams) setJoinDisabled(true);
+			setTournamentInfo({ ...location.state, ...data });
+			setEnrolled(data.joined);
+		} else {
+			navigate(-1);
+		}
 	};
 
 	//Funzione che gestisce la fine del countdown
-	const handleCountdownEnd = () => {
+	const handleCountdownEnd = async () => {
 		setTournamentStarted(true);
+		await getTournamentInfo(id);
 		createBracket();
+	};
+
+	const ottieniStatusBracket = (statusMatch) => {
+		if (statusMatch == "PLAYING" || statusMatch == "WAITING") {
+			return "DONE";
+		}
+		if (statusMatch == "WO") return "WALK_OVER";
+		return "NOT_STARTED";
+	};
+
+	const ottieniStatusTeam = (statusMatch) => {
+		if (statusMatch == "PLAYING" || statusMatch == "WAITING") return null;
+		if (statusMatch == "WALK_OVER") return null;
+	};
+
+	//Funzione che gestisce la scritta del nome del team
+	const ottieniUsernameDaVisualizzare = (username, status) => {
+		if (username) return username;
+		if (status == "WO") return "";
+		if (status == "WAITING") return "";
+	};
+
+	//Funzione che gestisce la scritta sul risultato del match
+	const ottieniResultText = (status, winnerTeam, teamId) => {
+		if (status == "PLAYING") return null;
+		if (!winnerTeam) return null;
+		if (status == "WO" && winnerTeam != teamId) return "";
+		if (winnerTeam == teamId) return "WIN";
+		else return "LOSE";
+	};
+
+	const ottieniWinnerTeam = (status, winnerTeam, idTeam) => {
+		if (status == "WAITING") return null;
+		if (status == "WO" && winnerTeam == idTeam) return "WIN";
+
+		return false;
 	};
 
 	//Funzione che crea il bracket del torneo usando dei dati falsi
 	const createBracket = () => {
 		let bracket = [];
-		let partecipant = [];
 
 		//Per creare il bracket devo avere un numero di partecipanti che sia una potenza di 2
 		let massimoNumeroPartecipanti = Math.pow(
 			2,
 			Math.ceil(Math.log(tournamentInfo.enrolled) / Math.log(2))
 		);
-
 		if (massimoNumeroPartecipanti === 0) {
 			setNoMatch(true);
 			return;
 		}
-
-		//Calcolo il numero di round del torneo
-		var rounds = Math.log(massimoNumeroPartecipanti) / Math.log(2);
-
 		// Il numero dei match è sempre il numero dei team iscritti meno uno
-
-		//Se il team è iscritto lo aggiungo al bracket
-		if (team.current) {
-			//Diminuisco il numero di partecipanti che dovrò creare
-			--massimoNumeroPartecipanti;
-			partecipant.push({
-				id: localStorage.getItem("username"),
-				name: team.current.teamName,
-				img: faker.image.avatar(),
-			});
-		}
-
-		//Creo i finti partecipanti
-		for (let i = 0; i < massimoNumeroPartecipanti; i++) {
-			if (i < tournamentInfo.enrolled) {
-				let id = faker.datatype.uuid();
-				let obj = {
-					id: id,
-					name: faker.internet.userName(),
-					img: faker.image.avatar(),
-				};
-				partecipant.push(obj);
-			} else {
-				// se non ho abbastanza partecipanti creo dei partecipanti con nome TBD che non partecipanno al torneo, servono solo per gestire i bracket
-				partecipant.push({
-					id: faker.datatype.uuid(),
-					name: "TBD",
-				});
+		let lastMatch;
+		let id = 0;
+		for (let i = 0; i < tournamentInfo.bracket.length; i++) {
+			//Cerco l`ultimo match in cui è presente il team dell`utente
+			if (tournamentInfo.bracket[i]?.team1?.components?.includes(Cookies.get("id"))) {
+				lastMatch = tournamentInfo.bracket[i];
 			}
-		}
 
-		for (let i = 1; i < rounds + 1; i++) {
-			//Se è il primo round
-			if (i === 1)
-				for (let j = 0; j < partecipant.length; j += 2) {
-					//Itero i partecipanti a due a due per creare i match
-					let status = "SCORE_DONE";
-					let randomNumber = Math.random(); // Genero un numero random
-					let partecipanti = [];
-					let obj1 = {
-						id: partecipant[j]?.id || null,
-						resultText: randomNumber > 0.5 ? "Won" : "Lost", //Se il numero è maggiore di 0.5 il primo partecipante ha vinto altrimenti ha perso
-						isWinner: randomNumber > 0.5 ? true : false,
-						status: "PLAYED",
-						name: partecipant[j]?.name || "TBD",
-						img: partecipant[j]?.img || null,
-					};
-					let obj2 = {
-						id: partecipant[j + 1]?.id || null,
-						resultText: randomNumber > 0.5 ? "Lost" : "Won",
-						isWinner: randomNumber > 0.5 ? false : true,
-						status: "PLAYED",
-						name: partecipant[j + 1]?.name || "TBD",
-						img: partecipant[j + 1]?.img || null,
-					};
-					//Se il nome del partecipante è TBD vuol dire che è un WALK_OVER
-					if (obj1.name !== "TBD") partecipanti.push(obj1);
-					if (obj2.name !== "TBD") partecipanti.push(obj2);
-
-					if (partecipanti.length === 1) {
-						status = "WALK_OVER";
-						partecipanti[0].isWinner = true;
-						partecipanti[0].resultText = "Won";
-					}
-					//Creo l'id del prossimo match che sarà il round successivo (Round 2) e il match successivo Sarà il match attuale /4 + 1
-					// +1 perchè i match partono da 1 e non da 0
-					let nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.floor(j / 4 + 1));
-					//se è presente un solo round allora non ho un match successivo
-					if (i === rounds) nextMatchId = null;
-					let obj = {
-						id: "Round " + 1 + " Match " + Number(Math.ceil(j / 2) + 1),
-						nextMatchId: nextMatchId,
-						torunamentRoundText: i.toString(),
-						// startTime: new Date().toLocaleDateString(),
-						state: status,
-						participants: partecipanti,
-					};
-					bracket.push(obj);
-				}
-			else {
-				//Creo i match successivi al primo
-				for (let j = 1; j <= Math.pow(2, rounds - i); j++) {
-					let nextMatchId = null;
-
-					// // Se è l`ultimo round allora non ha un match successivo   (e` la finale)
-					if (i === rounds) nextMatchId = null;
-					else nextMatchId = "Round " + Number(i + 1) + " Match " + Number(Math.ceil(j / 2));
-
-					let partecipanti = [];
-
-					//Offset serve a capire da dove devo partire a prendere i team che hanno vinto il match precedente
-					let offset = 0;
-					if (i > 2) offset = calcolaOffset(rounds, i);
-					const startIndex = offset + 2 * (j - 1);
-
-					//prendo i match precedenti
-					let match1 = bracket[startIndex];
-					let match2 = bracket[startIndex + 1];
-					let randomNumber = Math.random();
-					let partecipant1 = null;
-					let partecipant2 = null;
-
-					//Trovo chi ha vinto il primo match precedente
-					//E lo aggiorno con il risultato del nuovo match
-					for (let k = 0; k < match1.participants.length; k++) {
-						if (match1.participants[k].isWinner) {
-							partecipant1 = {
-								...match1.participants[k],
-								resultText: randomNumber >= 0.5 ? "Won" : "Lost",
-								isWinner: randomNumber >= 0.5 ? true : false,
-								status: "PLAYED",
-							};
-						}
-					}
-
-					//Trovo chi ha vinto il secondo match precedente
-					//E lo aggiorno con il risultato del nuovo match
-					for (let k = 0; k < match2.participants.length; k++) {
-						if (match2.participants[k].isWinner) {
-							partecipant2 = {
-								...match2.participants[k],
-								resultText: randomNumber < 0.5 ? "Won" : "Lost",
-								isWinner: randomNumber < 0.5 ? true : false,
-								status: "PLAYED",
-							};
-						}
-					}
-					if (partecipant1) partecipanti.push(partecipant1);
-					if (partecipant2) partecipanti.push(partecipant2);
-
-					let status = "SCORE_DONE";
-					//Se è presente un solo partecipante vuol dire che è un WALK_OVER
-					if (partecipanti.length === 1) {
-						status = "WALK_OVER";
-						partecipanti[0].isWinner = true;
-						partecipanti[0].resultText = "Won";
-					}
-
-					bracket.push({
-						id: "Round " + i + " Match " + j,
-						nextMatchId: nextMatchId,
-						tournamentRoundText: i.toString(),
-						// startTime: new Date().toLocaleDateString(),
-						state: status,
-						participants: partecipanti,
-					});
-				}
+			if (tournamentInfo.bracket[i]?.team2?.components?.includes(Cookies.get("id"))) {
+				lastMatch = tournamentInfo.bracket[i];
 			}
+			let status = ottieniStatusBracket(tournamentInfo.bracket[i].status);
+			let statusTeam = ottieniStatusTeam(status);
+			let obj = {
+				id: tournamentInfo.bracket[i].tournamentMatchRef,
+				nextMatchId: tournamentInfo.bracket[i].tournamentNextMatchRef,
+				torunamentRoundText: tournamentInfo.bracket[i].roundText,
+				state: status,
+				participants: [
+					{
+						id: tournamentInfo.bracket[i].team1?._id || id,
+						resultText: ottieniResultText(
+							tournamentInfo.bracket[i].status,
+							tournamentInfo.bracket[i].winner,
+							tournamentInfo.bracket[i].team1?._id
+						),
+						isWinner: ottieniWinnerTeam(
+							tournamentInfo.bracket[i].status,
+							tournamentInfo.bracket[i].winner,
+							tournamentInfo.bracket[i].team1?._id
+						),
+						status: statusTeam,
+						name: ottieniUsernameDaVisualizzare(
+							tournamentInfo.bracket[i].team1?.name,
+							tournamentInfo.bracket[i].status
+						),
+					},
+					{
+						id: tournamentInfo.bracket[i].team2?._id || id + 1,
+						resultText: ottieniResultText(
+							tournamentInfo.bracket[i].status,
+							tournamentInfo.bracket[i].winner,
+							tournamentInfo.bracket[i].team2?._id
+						),
+						isWinner: ottieniWinnerTeam(
+							tournamentInfo.bracket[i].status,
+							tournamentInfo.bracket[i].winner,
+							tournamentInfo.bracket[i].team2?._id
+						),
+						status: statusTeam,
+						name: ottieniUsernameDaVisualizzare(
+							tournamentInfo.bracket[i].team2?.name,
+							tournamentInfo.bracket[i].status
+						),
+					},
+				],
+			};
+			id += 2;
+			bracket.push(obj);
 		}
-		//Imposto l`ultimo match come match da visualizzare
-		setCurrentMatch(bracket[bracket.length - 1]);
-		//Imposto il bracket
+		setCurrentMatch(lastMatch);
 		setBracket(bracket);
-	};
 
-	//Funzione che calcola l`offset da cui partire per prendere i partecipanti
-	const calcolaOffset = (rounds, i) => {
-		let offset = Math.pow(2, rounds - i + 2);
-		--i;
-		while (i > 2) {
-			offset += Math.pow(2, rounds - i + 2);
-			i--;
-		}
-		return offset;
+		//Imposto l`ultimo match come match da visualizzare
+	};
+	//Funzione che gestisce il click su un match
+	const showMatch = () => {
+		navigate("/match/" + currentMatch._id);
 	};
 	return (
 		<div className={style.container_tournament_bracket}>
@@ -251,31 +196,27 @@ export default function TournamentInfo() {
 					<div className={style.container_tournament_header}>
 						<div className={style.container_img_titolo}>
 							<div>
-								<h1 className={style.title_tournament}>{tournamentInfo.tournamentTitle}</h1>
+								<h1 className={style.title_tournament}>{tournamentInfo.name}</h1>
 								<div className={style.container_img_platform}>
-									<Icon
-										src={require("../../assets/images/monitor.png")}
-										id={"monitor"}
-										title={"Monitor"}
-									/>
-									<Icon
-										src={require("../../assets/images/xbox.png")}
-										width={40}
-										id={"xbox"}
-										title={"Xbox"}
-									/>
-									<Icon
-										src={require("../../assets/images/ps4.png")}
-										id={"ps4"}
-										width={40}
-										title={"PS4"}
-									/>
-									<Icon
-										src={require("../../assets/images/european.png")}
-										id={"europe"}
-										width={25}
-										title={"Europe"}
-									/>
+									{tournamentInfo?.platform?.map((piattaforma) => (
+										<Icon
+											key={piattaforma.name}
+											src={piattaforma.image}
+											id={piattaforma.name}
+											title={piattaforma.name}
+											width={piattaforma.name == "PS4" || piattaforma.name == "XBOX" ? 40 : 20}
+										/>
+									))}
+
+									{tournamentInfo.region?.map((regione) => (
+										<Icon
+											src={regione.image}
+											id={regione.name}
+											title={regione.name}
+											width={25}
+											key={regione.name}
+										/>
+									))}
 								</div>
 							</div>
 						</div>
@@ -283,7 +224,10 @@ export default function TournamentInfo() {
 							<div className={style.container_countdown}>
 								<div className={style.container_value_countdown}>
 									<h4>Starts In:</h4>
-									<Countdown date={tournamentInfo.starting} onComplete={handleCountdownEnd} />
+									<Countdown
+										date={new Date(tournamentInfo.startingDate)}
+										onComplete={handleCountdownEnd}
+									/>
 								</div>
 							</div>
 						)}
@@ -303,22 +247,21 @@ export default function TournamentInfo() {
 							<div className={style.container_card_info}>
 								<FontAwesomeIcon icon={faWallet} color={"white"} size={"lg"} />
 								<p>
-									<strong>Entry fee:</strong> €{tournamentInfo.entryFee}
+									<strong>Entry fee:</strong>
+									{tournamentInfo.entryFee == 0 ? " Free" : "€ " + tournamentInfo.entryFee}
 								</p>
 							</div>
 							<div className={style.container_card_info}>
 								<FontAwesomeIcon icon={faUsers} color={"white"} size={"lg"} />
 								<p>
 									<strong>Enrolled:</strong>{" "}
-									{enrolled
-										? Number(tournamentInfo.enrolled + 1)
-										: tournamentInfo.enrolled + "/" + tournamentInfo.maxTeams}
+									{tournamentInfo.enrolled + "/" + tournamentInfo.maxTeams}
 								</p>
 							</div>
 							<div className={style.container_card_info}>
 								<FontAwesomeIcon icon={faEuroSign} color={"white"} size={"lg"} />
 								<p>
-									<strong>Prize:</strong> € {tournamentInfo.totalEarnings}
+									<strong>Prize:</strong> € {tournamentInfo.prize}
 								</p>
 							</div>
 						</div>
@@ -329,7 +272,7 @@ export default function TournamentInfo() {
 									width={80}
 									alt={"Second place"}
 								/>
-								<span>€ {tournamentInfo.secondEarnings}</span>
+								<span>€ {tournamentInfo.prizeSecondPlace}</span>
 							</div>
 							<div className={style.container_prize_item}>
 								<img
@@ -337,7 +280,7 @@ export default function TournamentInfo() {
 									width={100}
 									alt={"First place"}
 								/>
-								<span>€ {tournamentInfo.firstEarnings}</span>
+								<span>€ {tournamentInfo.prizeFirstPlace}</span>
 							</div>
 							<div className={style.container_prize_item}>
 								<img
@@ -345,7 +288,7 @@ export default function TournamentInfo() {
 									width={75}
 									alt={"Third place"}
 								/>
-								<span>€{tournamentInfo.thirdEarnings}</span>
+								<span>€{tournamentInfo.prizeThirdPlace}</span>
 							</div>
 						</div>
 					</div>
@@ -357,55 +300,68 @@ export default function TournamentInfo() {
 						{enrolled ? (
 							<Button className={"button"} disabled={true}>
 								<FontAwesomeIcon icon={faRightToBracket} color={"white"} className={"mr-10"} />
-								You Already joined this tournament, wait for the start!
+								You already joined this tournament, wait for the start!
 							</Button>
 						) : (
-							<NavLink to={{ pathname: "/createTeam" }} state={{ info: tournamentInfo }}>
-								<Button className={style.button + " button"}>
-									<FontAwesomeIcon icon={faRightToBracket} color={"white"} className={"mr-10"} />
-									Join
-								</Button>
-							</NavLink>
+							<>
+								{joinDisabled ? (
+									<Button className={style.button + " button"} disabled={joinDisabled}>
+										<FontAwesomeIcon icon={faRightToBracket} color={"white"} className={"mr-10"} />
+										Join
+									</Button>
+								) : (
+									<NavLink to={{ pathname: "/createTeam" }} state={{ info: tournamentInfo }}>
+										<Button className={style.button + " button"}>
+											<FontAwesomeIcon
+												icon={faRightToBracket}
+												color={"white"}
+												className={"mr-10"}
+											/>
+											Join
+										</Button>
+									</NavLink>
+								)}
+							</>
 						)}
 					</div>
 				)}
-
+				{/* 
 				{tournamentStarted && currentMatch && (
 					<>
-						<h2 className="mt-20 text-white">Current Match</h2>
-						<div className={style.container_next_match}>
+						<h2 className="mt-20 text-white">Your Match</h2>
+						<div className={style.container_next_match} onClick={showMatch}>
 							<div className={style.container_partecipante}>
-								<img
+								{/* <img
 									src={currentMatch.participants[0].img}
 									width={60}
 									height={60}
 									className={"mb-10"}
 									alt={"Team " + currentMatch.participants[0].name}
-								/>
-								<h4 className="mb-0">{currentMatch.participants[0].name}</h4>
+								/> 
+								<h4 className="mb-0">{currentMatch.team1?.name}</h4>
 							</div>
 							<div className={style.container_risultato_match}>
 								<h3 className={"text-white " + style.status_match}>
-									{currentMatch.state.replace(/_/g, " ")}
+									{currentMatch.status.replace(/_/g, " ")}
 								</h3>
 								<h1 className={"text-white text-center " + style.match_result}>
-									{currentMatch.participants[0].isWinner ? "1 " : "0 "} :{" "}
-									{currentMatch.participants[1].isWinner ? " 1" : " 0"}
+									{currentMatch.winner == currentMatch.team1?._id ? "1 " : "0 "} :{" "}
+									{currentMatch.winner == currentMatch.team2?._id ? " 1" : " 0"}
 								</h1>
 							</div>
 							<div className={style.container_partecipante}>
-								<img
+								{/* <img
 									src={currentMatch.participants[1].img}
 									width={60}
 									height={60}
 									className={"mb-10"}
 									alt={"Team " + currentMatch.participants[1].name}
-								/>
-								<h4 className="mb-0">{currentMatch.participants[1].name}</h4>
+								/> 
+								<h4 className="mb-0">{currentMatch.team2?.name}</h4>
 							</div>
 						</div>
 					</>
-				)}
+				)} */}
 
 				{tournamentStarted && bracket.length > 0 && (
 					<>
