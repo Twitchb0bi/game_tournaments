@@ -9,7 +9,7 @@ export const cleanText = (text) => text.replace(/[^ -~]+/g, " ");
 export const cleanTextAndRemoveDashesAndUnderscores = (text) =>
 	removeDashesAndUnderscores(cleanText(text));
 
-export const URL_BASE = "http://localhost:8080";
+export const URL_BASE = "http://games.robertofoti.com:8090";
 
 //Funzione che mi restituisce una data nel formato corretto
 export const ottieniFormatoDataCorretto = (data) => {
